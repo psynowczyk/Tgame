@@ -4,10 +4,13 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/tgame');
 
-var routes = require('./routes/routes');
+var User = require('./models/user');
+//var routes = require('./routes/routes');
 
 var app = express();
 
@@ -23,7 +26,52 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
+//app.use('/', routes);
+require('./routes/routes.js')(app, passport);
+
+passport.use('local-signup',
+	new LocalStrategy({
+	   usernameField : 'login',
+	   passwordField : 'password'
+	},
+	function(req, login, password, done) {
+		User.findOne({'local.login': login}, function(err, user) {
+			if (err) return done(err);
+			if (user) return done(null, false, {message: 'That login is already taken.'});
+			else {
+				User.findOne({'local.username': req.body.username}, function(err, user) {
+					if (err) return done(err);
+					if (user) return done(null, false, {message: 'That username is already taken.'});
+					else {
+						var newUser = new User();
+						newUser.local.login = login;
+						newUser.local.username = req.body.username;
+						newUser.local.password = newUser.generateHash(password);
+						newUser.save(function(err) {
+							if (err) throw err;
+							return done(null, newUser);
+						});
+					}
+				});
+			}
+		});
+	}
+));
+passport.use('local-login', new LocalStrategy({
+   usernameField: 'login',
+   passwordField: 'password'
+},
+function(login, password, done) {
+    User.findOne({'local.login': login}, function(err, user) {
+      if (err) return done(err);
+      if (!user) return done(null, false, {message: 'Incorrect login.'});
+      if (!user.validPassword(password)) return done(null, false, {message: 'Incorrect password.'});
+      return done(null, user);
+    });
+  }
+));
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
