@@ -13,6 +13,24 @@ module.exports = function (app, passport) {
 	app.get('/', function (req, res, next) {
 	  res.render('index', {title: 'Tgame'});
 	});
+	// INDEX
+	app.post('/', function (req, res, next) {
+		var action = req.body.action;
+		if (action == 'uniq-username') {
+			var username = req.body.username;
+			User.findOne({'local.username': username}, function (err, result) {
+				if(!err && !result) res.send('success');
+				else res.send('fail');
+			});
+		}
+		else if (action == 'uniq-login') {
+			var login = req.body.login;
+			User.findOne({'local.login': login}, function (err, result) {
+				if(!err && !result) res.send('success');
+				else res.send('fail');
+			});
+		}
+	});
 
 	// SIGNUP
 	app.get('/signup', isLoggedOut, function (req, res) {

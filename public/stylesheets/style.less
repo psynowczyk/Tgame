@@ -22,10 +22,11 @@ body {
 	font: normal 13px opensans_regular;
 	color: #404040;
 	background: #000000 url(/images/background.jpg) no-repeat;
-	background-size: 100% auto;
+	background-size: contain 100%;
 	background-position: center 20px;
 }
 body * {float: left;}
+br {float: none;}
 
 a				{color: #404040;}
 a:visited	{color: #404040;}
@@ -64,3 +65,4 @@ a:visited	{color: #404040;}
 	input[type="submit"]		{font: normal 11px opensans_semibold; padding: 0 10px; height: 26px; line-height: 24px; border: 1px solid #808080; border-radius: 3px; background-color: #f2f2f2;}
 	input[type="submit"]:hover	{cursor: pointer; color: #127db3; background-color: #ffffff;}
 	.label						{margin-right: 5px; width: 80px; height: 26px; line-height: 26px; text-align: right;}
+	.inputstatus				{font-size: 11px; display: none; position: absolute; margin-left: 295px; padding: 2px 10px; width: auto; height: 22px; line-height: 22px; background-color: #0d5980; color: #ffffff; box-shadow: 0px 0px 0px 1px #e6e6e6; border-radius: 3px;}
