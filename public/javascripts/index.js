@@ -10,7 +10,5 @@ $(document).ready(function() {
 
 	if(site == '/') {
 
-		alert("Polnik śmierdzisz");
-
 	}
 });
