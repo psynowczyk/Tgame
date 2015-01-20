@@ -1,3 +1,5 @@
+var User = require('../models/user');
+
 module.exports = function (app, passport) {
 
 	app.get('*', function (req, res, next) {
@@ -21,6 +23,17 @@ module.exports = function (app, passport) {
 		successRedirect : '/',
 		failureRedirect : '/signup'
 	}));
+
+	// LOGIN
+	app.post('/login', passport.authenticate('local-login', {
+		successRedirect : '/',
+		failureRedirect : '/'
+	}));
+	// LOGOUT
+	app.get('/logout', isLoggedIn, function (req, res) {
+		req.logout();
+		res.redirect('/');
+	});
 
 }
 

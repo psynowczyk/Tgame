@@ -14,5 +14,12 @@ html
 				a(href='/' class='navilink') Home
 			else
 				a(href='/signup' class='navilink') Rejestracja
+				form(action='/login', method='post')
+						div(class='forminputbox')
+							input(type='text', name='login', placeholder='login')
+						div(class='forminputbox')
+							input(type='password', name='password', placeholder='password')
+						div(class='forminputbox')
+							input(type='submit', value='login')
 		div(class='container')
 			block content

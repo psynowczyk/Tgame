@@ -5,13 +5,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
+var session = require('express-session');
 var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/tgame');
-
 var User = require('./models/user');
-//var routes = require('./routes/routes');
-
 var app = express();
 
 // view engine setup
@@ -26,47 +24,65 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+	secret: 'asdsadasd',
+	resave: true,
+	saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
-//app.use('/', routes);
 require('./routes/routes.js')(app, passport);
 
-passport.use('local-signup',
-	new LocalStrategy({
+passport.serializeUser(function(user, done) {
+   done(null, user.id);
+});
+passport.deserializeUser(function(id, done) {
+   User.findById(id, function(err, user) {
+      done(err, user);
+   });
+});
+
+passport.use('local-signup', new LocalStrategy({
 	   usernameField : 'login',
-	   passwordField : 'password'
+	   passwordField : 'password',
+	   passReqToCallback : true
 	},
 	function(req, login, password, done) {
-		User.findOne({'local.login': login}, function(err, user) {
-			if (err) return done(err);
-			if (user) return done(null, false, {message: 'That login is already taken.'});
-			else {
-				User.findOne({'local.username': req.body.username}, function(err, user) {
-					if (err) return done(err);
-					if (user) return done(null, false, {message: 'That username is already taken.'});
-					else {
-						var newUser = new User();
-						newUser.local.login = login;
-						newUser.local.username = req.body.username;
-						newUser.local.password = newUser.generateHash(password);
-						newUser.save(function(err) {
-							if (err) throw err;
-							return done(null, newUser);
-						});
-					}
-				});
-			}
+		process.nextTick(function() {
+			User.findOne({'local.login': login}, function(err, user) {
+				if (err) return done(err);
+				if (user) return done(null, false, {message: 'That login is already taken.'});
+				else {
+					User.findOne({'local.username': req.body.username}, function(err, user) {
+						if (err) return done(err);
+						if (user) return done(null, false, {message: 'That username is already taken.'});
+						else {
+							var newUser = new User();
+							newUser.local.login = login;
+							newUser.local.username = req.body.username;
+							newUser.local.password = newUser.generateHash(password);
+							newUser.save(function(err) {
+								if (err) throw err;
+								return done(null, newUser);
+							});
+						}
+					});
+				}
+			});
 		});
 	}
 ));
 passport.use('local-login', new LocalStrategy({
    usernameField: 'login',
-   passwordField: 'password'
+   passwordField: 'password',
+   passReqToCallback : true
 },
-function(login, password, done) {
+function(req, login, password, done) {
     User.findOne({'local.login': login}, function(err, user) {
       if (err) return done(err);
-      if (!user) return done(null, false, {message: 'Incorrect login.'});
-      if (!user.validPassword(password)) return done(null, false, {message: 'Incorrect password.'});
+      if (!user) return done(null, false);
+      if (!user.validPassword(password)) return done(null, false);
       return done(null, user);
     });
   }
