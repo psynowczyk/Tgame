@@ -10,5 +10,7 @@ $(document).ready(function() {
 
 	if(site == '/') {
 
+		alert("Test");
+
 	}
 });
