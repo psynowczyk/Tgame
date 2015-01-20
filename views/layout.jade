@@ -1,7 +1,18 @@
 doctype html
 html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
+	head
+		title= title
+		link(rel='stylesheet', href='/stylesheets/style.css')
+		link(rel='stylesheet', href='/stylesheets/index.css')
+		link(rel='stylesheet', href='/stylesheets/signup.css')
+		script(src="/javascripts/jquery-2.1.1.min.js")
+		script(src="/javascripts/index.js")
+	body
+		div(class='header')
+			a(href='/' class='navilink') Strona główna
+			if loggedIn
+				a(href='/' class='navilink') Home
+			else
+				a(href='/signup' class='navilink') Rejestracja
+		div(class='container')
+			block content
