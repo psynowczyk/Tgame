@@ -10,6 +10,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/tgame');
 var User = require('./models/user');
+var Wallet = require('./models/wallet');
 var app = express();
 
 // view engine setup
@@ -62,9 +63,16 @@ passport.use('local-signup', new LocalStrategy({
 							newUser.local.login = login;
 							newUser.local.username = req.body.username;
 							newUser.local.password = newUser.generateHash(password);
-							newUser.save(function(err) {
+							newUser.save(function(err, record) {
 								if (err) throw err;
-								return done(null, newUser);
+								else {
+									var newWallet = new Wallet();
+									newWallet.owner = record._id;
+									newWallet.save(function(err) {
+										if (err) throw err;
+										else return done(null, newUser);
+									});
+								}
 							});
 						}
 					});

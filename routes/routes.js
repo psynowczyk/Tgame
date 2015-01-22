@@ -1,12 +1,22 @@
 var User = require('../models/user');
+var Wallet = require('../models/wallet');
 
 module.exports = function (app, passport) {
 
 	app.get('*', function (req, res, next) {
 		res.locals.loggedIn = (req.user) ? true : false;
-		if (req.isAuthenticated()) res.locals.username = req.user.local.username || null;
-		if (req.isAuthenticated()) res.locals.usertype = req.user.local.usertype || null;
-		next();
+		if (req.isAuthenticated()) {
+			res.locals.username = req.user.local.username || null;
+			res.locals.usertype = req.user.local.usertype || null;
+			Wallet.findOne({'owner': req.user._id}, function (err, result) {
+				if(!err && result) {
+					res.locals.wallet = result.value;
+					next();
+				}
+				else console.log(err);
+			});
+		}
+		else next();
 	});
 
 	// INDEX
