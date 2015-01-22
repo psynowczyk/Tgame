@@ -8,10 +8,9 @@ html
 		script(src="/javascripts/jquery-2.1.1.min.js")
 		script(src="/javascripts/index.js")
 	body
-		div(class='header')
+		div(id='header')
 			if loggedIn
 				a(href='/' class='navilink') Kokpit
-				a(href='/logout' class='navilink') Wyloguj
 			else
 				a(href='/' class='navilink') Strona główna
 				a(href='/signup' class='navilink') Rejestracja
@@ -22,12 +21,18 @@ html
 							input(type='password', name='password', placeholder='password')
 						div(class='forminputbox')
 							input(type='submit', value='login')
-		div(class='container')
+		div(id='container')
 			block content
-		div(class='footer')
+		div(id='footer')
 			if loggedIn
-				div(class='footavatar')
-				div(class='footbar')
-					div(class='walletbox')
-						div(class='walleticon') $
-						div(class='walletvalue')= wallet
+				div(id='footavatar')
+				div(id='footbar')
+					div(id='useroptions')
+						div(class='useroption')
+							a(href='/editprofile') edytuj profil
+						div(class='useroption')
+							a(href='/logout') wyloguj
+					div(id='usermenu', status='0')= username
+					div(id='walletbox')
+						div(id='walleticon') $
+						div(id='walletvalue')= wallet
