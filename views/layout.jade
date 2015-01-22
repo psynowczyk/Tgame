@@ -9,10 +9,11 @@ html
 		script(src="/javascripts/index.js")
 	body
 		div(class='header')
-			a(href='/' class='navilink') Strona główna
 			if loggedIn
+				a(href='/' class='navilink') Kokpit
 				a(href='/logout' class='navilink') Wyloguj
 			else
+				a(href='/' class='navilink') Strona główna
 				a(href='/signup' class='navilink') Rejestracja
 				form(action='/login', method='post', class='loginform')
 						div(class='forminputbox')
@@ -27,3 +28,6 @@ html
 			if loggedIn
 				div(class='footavatar')
 				div(class='footbar')
+					div(class='walletbox')
+						div(class='walleticon') $
+						div(class='walletvalue')= wallet
