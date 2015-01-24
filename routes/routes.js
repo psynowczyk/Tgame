@@ -1,5 +1,7 @@
 var User = require('../models/user');
 var Wallet = require('../models/wallet');
+var Planet = require('../models/planet');
+var Notification = require('../models/notification');
 
 module.exports = function (app, passport) {
 
@@ -10,7 +12,10 @@ module.exports = function (app, passport) {
 			res.locals.usertype = req.user.local.usertype || null;
 			Wallet.findOne({'owner': req.user._id}, function (err, result) {
 				if(!err && result) {
-					res.locals.wallet = result.value;
+					res.locals.cash = result.cash;
+					res.locals.oil = result.oil;
+					res.locals.gas = result.gas;
+					res.locals.metal = result.metal;
 					next();
 				}
 				else console.log(err);
@@ -21,12 +26,22 @@ module.exports = function (app, passport) {
 
 	// INDEX
 	app.get('/', function (req, res, next) {
-	  res.render('index', {title: 'Tgame'});
+		res.render('index');
 	});
 	// INDEX
 	app.post('/', function (req, res, next) {
 		var action = req.body.action;
-		if (action == 'uniq-username') {
+		if (action == 'is-logged-in') {
+			if (req.isAuthenticated()) res.send('success');
+			else res.send('fail');
+		}
+		else if (action == 'get-notifications') {
+			Notification.find({'owner': req.user._id}, function (err, result) {
+				if(!err && !result) res.send(result);
+				else res.send('fail');
+			}).limit(10);
+		}
+		else if (action == 'uniq-username') {
 			var username = req.body.username;
 			User.findOne({'local.username': username}, function (err, result) {
 				if(!err && !result) res.send('success');
@@ -42,19 +57,27 @@ module.exports = function (app, passport) {
 		}
 	});
 
+	// DASHBOARD
+	app.get('/dashboard', isLoggedIn, function (req, res, next) {
+		Planet.findOne({'owner': req.user._id}, function (err, planet) {
+			if(!err && planet) res.render('dashboard', {'planet': planet.image});
+			else console.log(err);
+		});
+	});
+
 	// SIGNUP
 	app.get('/signup', isLoggedOut, function (req, res) {
 		res.render('signup', {'title': 'Rejestracja'});
 	});
 	// SIGNUP
 	app.post('/signup', isLoggedOut, passport.authenticate('local-signup', {
-		successRedirect : '/',
+		successRedirect : '/dashboard',
 		failureRedirect : '/signup'
 	}));
 
 	// LOGIN
 	app.post('/login', passport.authenticate('local-login', {
-		successRedirect : '/',
+		successRedirect : '/dashboard',
 		failureRedirect : '/'
 	}));
 	// LOGOUT
