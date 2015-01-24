@@ -62,7 +62,11 @@ module.exports = function (app, passport) {
 		req.logout();
 		res.redirect('/');
 	});
-
+	// MAP
+	app.post('/map', isLoggedIn, passport.authenticate('local-login', {
+		successRedirect : '/map',
+		failureRedirect : '/signup'
+	}));
 }
 
 function isLoggedIn(req, res, next) {
