@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var bcrypt = require('bcrypt-nodejs');
 
 var walletSchema = mongoose.Schema({
       'owner': mongoose.Schema.Types.ObjectId,
