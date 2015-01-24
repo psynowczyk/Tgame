@@ -4,12 +4,23 @@ $(document).ready(function() {
 
 	var window_height = $(window).height();
 	var window_width = $(window).width();
-	$('.container').css({'width': (window_width-200) +'px', 'height': (window_height-300) +'px'});
-
+	$('#container').css({'width': (window_width-200) +'px', 'height': (window_height-300) +'px'});
 	$('a.navilink[href="'+ site +'"]').css({'background-color': '#0d5980', 'color': '#ffffff', 'box-shadow': 'inset 0px 3px 4px 0px #0a4766'});
+	$('#useroptions').css({'margin-top': ($('#useroptions').height() * -1) +'px'});
+	$('#usermenu').on('click', function () {
+		var status = $(this).attr('status');
+		if (status == '0') {
+			$('#useroptions').css('display', 'block');
+			$('#usermenu').attr('status', '1');
+		}
+		else {
+			$('#useroptions').css('display', 'none');
+			$('#usermenu').attr('status', '0');
+		}
+	});
 
 	if(site == '/') {
-
+		
 	}
 	else if(site == '/signup') {
 		var username = '', login = '', password = '';
