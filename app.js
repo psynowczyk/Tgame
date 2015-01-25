@@ -12,6 +12,7 @@ mongoose.connect('mongodb://localhost/tgame');
 var User = require('./models/user');
 var Wallet = require('./models/wallet');
 var Planet = require('./models/planet');
+var Notification = require('./models/notification');
 var app = express();
 
 // view engine setup
