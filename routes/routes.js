@@ -63,16 +63,9 @@ module.exports = function (app, passport) {
 		res.redirect('/');
 	});
 	// MAP
-<<<<<<< HEAD
 	app.get('/map', isLoggedIn, function (req, res) {
 	res.render('map');
 	});
-=======
-	app.post('/map', isLoggedIn, passport.authenticate('local-login', {
-		successRedirect : '/map',
-		failureRedirect : '/signup'
-	}));
->>>>>>> master
 }
 
 function isLoggedIn(req, res, next) {
