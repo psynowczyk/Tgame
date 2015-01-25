@@ -48,6 +48,35 @@ Cost.findOne({'id': 1}, function (err, result) {
 	}
 });
 
+var incomeInterval = setInterval(function () {
+	User.find().stream().on('data', function (user) {
+		Structure.findOne({'owner': user._id}, function (err, structure) {
+			if (err) throw err;
+			else {
+				Cost.findOne({'id': 1}, function (err, cost) {
+					if (err) throw err;
+					else {
+						Wallet.update({'owner': user._id}, {
+							$inc: {
+								cash: (structure.income.gold_mine * cost.gold_mine.cash / 3),
+								oil: (structure.income.oil_rig * cost.oil_rig.oil / 3),
+								gas: (structure.income.gas_rig * cost.gas_rig.gas / 3),
+								metal: (structure.income.metal_mine * cost.metal_mine.metal / 3)
+							}
+						}, function (err) {
+							console.log('Wallet updated');
+						});
+					}
+				});
+			}
+		});
+	}).on('error', function (err) {
+		console.log('Error: wallets not updated');
+	}).on('end', function () {
+		console.log('Wallets updated');
+	});
+}, 10000);
+
 passport.serializeUser(function(user, done) {
    done(null, user.id);
 });

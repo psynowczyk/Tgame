@@ -65,6 +65,14 @@ module.exports = function (app, passport) {
 				});
 			}
 		}
+		else if (action == 'get-wallet') {
+			if (req.isAuthenticated()) {
+				Wallet.findOne({'owner': req.user._id}, function (err, result) {
+					if(!err && result) res.send(result);
+					else res.send('fail');
+				});
+			}
+		}
 	});
 
 	// DASHBOARD

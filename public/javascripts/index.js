@@ -2,9 +2,6 @@ var site = window.location.pathname;
 
 $(document).ready(function() {
 
-	var window_height = $(window).height();
-	var window_width = $(window).width();
-	$('#container').css({'width': (window_width-200) +'px', 'height': (window_height-250) +'px'});
 	$('a.navilink[href="'+ site +'"]').css({'background-color': '#0d5980', 'color': '#ffffff', 'box-shadow': 'inset 0px 3px 4px 0px #0a4766'});
 	$('#useroptions').css({'margin-top': ($('#useroptions').height() * -1) +'px'});
 	$('#usermenu').on('click', function () {
@@ -18,6 +15,24 @@ $(document).ready(function() {
 			$('#usermenu').attr('status', '0');
 		}
 	});
+
+	var incomeInterval = setInterval(function () {
+		var postdata = {'action': 'get-wallet'};
+		$.ajax({
+		   url: '/',
+		   type: 'POST',
+		   contentType: 'application/json',
+		   data: JSON.stringify(postdata),
+		   success: function (result) {
+		   	if(result != 'fail') {
+		   		$('.walletvalue[data-type="cash"]').html(result.cash);
+		   		$('.walletvalue[data-type="oil"]').html(result.oil);
+		   		$('.walletvalue[data-type="gas"]').html(result.gas);
+		   		$('.walletvalue[data-type="metal"]').html(result.metal);
+		   	}
+		   }
+		});
+	}, 5000);
 
 	if(site == '/') {
 		
