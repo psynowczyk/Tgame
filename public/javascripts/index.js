@@ -22,7 +22,7 @@ $(document).ready(function() {
 	if(site == '/') {
 		
 	}
-	if(site == '/dashboard') {
+	else if(site == '/dashboard') {
 		$('body').css('background-image', 'none');
 		var postdata = {'action': 'get-notifications'};
 		$.ajax({
@@ -38,6 +38,23 @@ $(document).ready(function() {
 		   	}
 			   else $('#kok_notifications').append('<div class="kok_notification">Brak powiadomień.</div>');
 		   }
+		});
+	}
+	else if(site == '/structures') {
+		$('body').css('background-image', 'none');
+		$('.structure_upgrade').on('click', function (){
+			var structure = $(this).attr('data-struct');
+			var postdata = {'action': 'upgrade-structure', 'structure': structure};
+			$.ajax({
+			   url: '/structures',
+			   type: 'POST',
+			   contentType: 'application/json',
+			   data: JSON.stringify(postdata),
+			   success: function (result) {
+			   	if(result == 'success') window.location.href = '/structures';
+				   else if(result == 'fail:resources') alert('Brak środków.');
+			   }
+			});
 		});
 	}
 	else if(site == '/signup') {
