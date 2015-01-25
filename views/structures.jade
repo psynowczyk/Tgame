@@ -1,0 +1,92 @@
+extends layout
+
+block content
+	div(id='structuresbox')
+		div(class='structure')
+			div(class='structure_image', data-type='gold_mine')
+			div(class='structure_details')
+				div(class='structure_title') Kopalnia złota
+				div(class='structure_lvlbox')
+					div(class='structure_lvl')= 'Lv. '+ structures.income.gold_mine
+				div(class='structure_text')= 'Aktualny dochód: '+ (costs.gold_mine.cash * structures.income.gold_mine / 3)
+				div(class='structure_text')= 'Następny dochód: '+ (costs.gold_mine.cash * (structures.income.gold_mine + 1) / 3)
+				div(class='structure_costs')
+					div(class='structure_upgrade', data-struct='gold_mine') Ulepsz
+					div(class='walletbox')
+						div(class='walleticon', data-type='cash') Gold
+						div(class='walletvalue')= costs.gold_mine.cash * structures.income.gold_mine
+					div(class='walletbox')
+						div(class='walleticon', data-type='oil') Oil
+						div(class='walletvalue')= costs.gold_mine.oil * structures.income.gold_mine
+					div(class='walletbox')
+						div(class='walleticon', data-type='gas') Gas
+						div(class='walletvalue')= costs.gold_mine.gas * structures.income.gold_mine
+					div(class='walletbox')
+						div(class='walleticon', data-type='metal') Metal
+						div(class='walletvalue')= costs.gold_mine.metal * structures.income.gold_mine
+		div(class='structure')
+			div(class='structure_image', data-type='metal_mine')
+			div(class='structure_details')
+				div(class='structure_title') Kopalnia matalu
+				div(class='structure_lvlbox')
+					div(class='structure_lvl')= 'Lv. '+ structures.income.metal_mine
+				div(class='structure_text')= 'Aktualny dochód: '+ (costs.metal_mine.metal * structures.income.metal_mine / 3)
+				div(class='structure_text')= 'Następny dochód: '+ (costs.metal_mine.metal * (structures.income.metal_mine + 1) / 3)
+				div(class='structure_costs')
+					div(class='structure_upgrade', data-struct='metal_mine') Ulepsz
+					div(class='walletbox')
+						div(class='walleticon', data-type='cash') Gold
+						div(class='walletvalue')= costs.metal_mine.cash * structures.income.metal_mine
+					div(class='walletbox')
+						div(class='walleticon', data-type='oil') Oil
+						div(class='walletvalue')= costs.metal_mine.oil * structures.income.metal_mine
+					div(class='walletbox')
+						div(class='walleticon', data-type='gas') Gas
+						div(class='walletvalue')= costs.metal_mine.gas * structures.income.metal_mine
+					div(class='walletbox')
+						div(class='walleticon', data-type='metal') Metal
+						div(class='walletvalue')= costs.metal_mine.metal * structures.income.metal_mine
+		div(class='structure')
+			div(class='structure_image', data-type='oil_rig')
+			div(class='structure_details')
+				div(class='structure_title') Platforma wiertnicza ropy naftowej
+				div(class='structure_lvlbox')
+					div(class='structure_lvl')= 'Lv. '+ structures.income.oil_rig
+				div(class='structure_text')= 'Aktualny dochód: '+ (costs.oil_rig.oil * structures.income.oil_rig / 3)
+				div(class='structure_text')= 'Następny dochód: '+ (costs.oil_rig.oil * (structures.income.oil_rig + 1) / 3)
+				div(class='structure_costs')
+					div(class='structure_upgrade', data-struct='oil_rig') Ulepsz
+					div(class='walletbox')
+						div(class='walleticon', data-type='cash') Gold
+						div(class='walletvalue')= costs.oil_rig.cash * structures.income.oil_rig
+					div(class='walletbox')
+						div(class='walleticon', data-type='oil') Oil
+						div(class='walletvalue')= costs.oil_rig.oil * structures.income.oil_rig
+					div(class='walletbox')
+						div(class='walleticon', data-type='gas') Gas
+						div(class='walletvalue')= costs.oil_rig.gas * structures.income.oil_rig
+					div(class='walletbox')
+						div(class='walleticon', data-type='metal') Metal
+						div(class='walletvalue')= costs.oil_rig.metal * structures.income.oil_rig
+		div(class='structure')
+			div(class='structure_image', data-type='gas_rig')
+			div(class='structure_details')
+				div(class='structure_title') Platforma wiertnicza gazu
+				div(class='structure_lvlbox')
+					div(class='structure_lvl')= 'Lv. '+ structures.income.gas_rig
+				div(class='structure_text')= 'Aktualny dochód: '+ (costs.gas_rig.gas * structures.income.gas_rig / 3)
+				div(class='structure_text')= 'Następny dochód: '+ (costs.gas_rig.gas * (structures.income.gas_rig + 1) / 3)
+				div(class='structure_costs')
+					div(class='structure_upgrade', data-struct='gas_rig') Ulepsz
+					div(class='walletbox')
+						div(class='walleticon', data-type='cash') Gold
+						div(class='walletvalue')= costs.gas_rig.cash * structures.income.gas_rig
+					div(class='walletbox')
+						div(class='walleticon', data-type='oil') Oil
+						div(class='walletvalue')= costs.gas_rig.oil * structures.income.gas_rig
+					div(class='walletbox')
+						div(class='walleticon', data-type='gas') Gas
+						div(class='walletvalue')= costs.gas_rig.gas * structures.income.gas_rig
+					div(class='walletbox')
+						div(class='walleticon', data-type='metal') Metal
+						div(class='walletvalue')= costs.gas_rig.metal * structures.income.gas_rig

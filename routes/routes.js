@@ -2,6 +2,8 @@ var User = require('../models/user');
 var Wallet = require('../models/wallet');
 var Planet = require('../models/planet');
 var Notification = require('../models/notification');
+var Structure = require('../models/structure');
+var Cost = require('../models/cost');
 
 module.exports = function (app, passport) {
 
@@ -55,6 +57,14 @@ module.exports = function (app, passport) {
 				else res.send('fail');
 			});
 		}
+		else if (action == 'get-costs') {
+			if (req.isAuthenticated()) {
+				Cost.findOne({'id': 1}, function (err, result) {
+					if(!err && result) res.send(result);
+					else res.send('fail');
+				});
+			}
+		}
 	});
 
 	// DASHBOARD
@@ -63,6 +73,71 @@ module.exports = function (app, passport) {
 			if(!err && planet) res.render('dashboard', {'planet': planet.image});
 			else console.log(err);
 		});
+	});
+
+	// STRUCTURES
+	app.get('/structures', isLoggedIn, function (req, res, next) {
+		Structure.findOne({'owner': req.user._id}, function (err, structures) {
+			if(!err && structures) {
+				Cost.findOne({'id': 1}, function (err, costs) {
+					if(!err && costs) res.render('structures', {'structures': structures, 'costs': costs});
+					else console.log(err);
+				});
+			}
+			else console.log(err);
+		});
+	});
+	// STRUCTURES
+	app.post('/structures', isLoggedIn, function (req, res, next) {
+		var action = req.body.action;
+		if (action == 'upgrade-structure') {
+			var structure = req.body.structure;
+			Structure.findOne({'owner': req.user._id}, function (err, structures) {
+				if(!err && structures) {
+					Cost.findOne({'id': 1}, function (err, costs) {
+						if(!err && costs) {
+							Wallet.findOne({'owner': req.user._id}, function (err, wallet) {
+								if(!err && wallet) {
+									if (
+										wallet.cash >= costs[structure].cash * structures.income[structure] &&
+										wallet.oil >= costs[structure].oil * structures.income[structure] &&
+										wallet.gas >= costs[structure].gas * structures.income[structure] &&
+										wallet.metal >= costs[structure].metal * structures.income[structure]
+									) {
+										Wallet.update(
+											{'owner': req.user._id},
+											{
+												$set: {
+													'cash': wallet.cash - costs[structure].cash * structures.income[structure],
+													'oil': wallet.oil - costs[structure].oil * structures.income[structure],
+													'gas': wallet.gas - costs[structure].gas * structures.income[structure],
+													'metal': wallet.metal - costs[structure].metal * structures.income[structure]
+												}
+											},
+											function (err) {
+												if(err) console.log(err);
+												else {
+													var query = {$set: {}};
+													query.$set['income.'+ structure] = structures.income[structure] + 1;
+													Structure.update({'owner': req.user._id}, query, function (err) {
+														if(err) {console.log(err); res.send('fail');}
+														else res.send('success');
+													});
+												}
+											}
+										);
+									}
+									else res.send('fail:resources');
+								}
+								else console.log(err);
+							});
+						}
+						else console.log(err);
+					});
+				}
+				else console.log(err);
+			});
+		}
 	});
 
 	// SIGNUP
