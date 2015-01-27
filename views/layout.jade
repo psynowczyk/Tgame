@@ -5,7 +5,6 @@ html
 		link(rel='stylesheet', href='/stylesheets/style.css')
 		link(rel='stylesheet', href='/stylesheets/index.css')
 		link(rel='stylesheet', href='/stylesheets/signup.css')
-		link(rel='stylesheet', href='/stylesheets/map.css')
 		link(rel='stylesheet', href='/stylesheets/dashboard.css')
 		link(rel='stylesheet', href='/stylesheets/structures.css')
 		script(src="/javascripts/jquery-2.1.1.min.js")
@@ -13,11 +12,10 @@ html
 	body
 		div(id='header')
 			if loggedIn
-				a(href='/' class='navilink') Kokpit
-				a(href='/map' class='navilink') Mapa
-				a(href='/' class='navilink') Kokpit
 				a(href='/dashboard' class='navilink') Kokpit
 				a(href='/structures' class='navilink') Budynki
+				a(href='/map' class='navilink') Mapa
+
 			else
 				a(href='/' class='navilink') Strona główna
 				a(href='/signup' class='navilink') Rejestracja
@@ -40,12 +38,6 @@ html
 						div(class='useroption')
 							a(href='/logout') wyloguj
 					div(id='usermenu', status='0')= username
-					div(id='walletbox')
-						div(id='walleticon') $
-						div(id='walletvalue')= wallet
-					div(id='walletbox')
-						div(id='walleticon') $
-						div(id='walletvalue')= wallet
 					div(class='walletbox')
 						div(class='walleticon', data-type='cash') Gold
 						div(class='walletvalue')= cash
