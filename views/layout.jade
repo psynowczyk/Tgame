@@ -6,6 +6,8 @@ html
 		link(rel='stylesheet', href='/stylesheets/index.css')
 		link(rel='stylesheet', href='/stylesheets/signup.css')
 		link(rel='stylesheet', href='/stylesheets/map.css')
+		link(rel='stylesheet', href='/stylesheets/dashboard.css')
+		link(rel='stylesheet', href='/stylesheets/structures.css')
 		script(src="/javascripts/jquery-2.1.1.min.js")
 		script(src="/javascripts/index.js")
 	body
@@ -13,6 +15,9 @@ html
 			if loggedIn
 				a(href='/' class='navilink') Kokpit
 				a(href='/map' class='navilink') Mapa
+				a(href='/' class='navilink') Kokpit
+				a(href='/dashboard' class='navilink') Kokpit
+				a(href='/structures' class='navilink') Budynki
 			else
 				a(href='/' class='navilink') Strona główna
 				a(href='/signup' class='navilink') Rejestracja
@@ -38,3 +43,18 @@ html
 					div(id='walletbox')
 						div(id='walleticon') $
 						div(id='walletvalue')= wallet
+					div(id='walletbox')
+						div(id='walleticon') $
+						div(id='walletvalue')= wallet
+					div(class='walletbox')
+						div(class='walleticon', data-type='cash') Gold
+						div(class='walletvalue')= cash
+					div(class='walletbox')
+						div(class='walleticon', data-type='oil') Oil
+						div(class='walletvalue')= oil
+					div(class='walletbox')
+						div(class='walleticon', data-type='gas') Gas
+						div(class='walletvalue')= gas
+					div(class='walletbox')
+						div(class='walleticon', data-type='metal') Metal
+						div(class='walletvalue')= metal
