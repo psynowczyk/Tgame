@@ -1,0 +1,115 @@
+extends layout
+
+block content
+	div(id='structuresbox')
+		div(class='structure')
+			div(class='structure_image', data-type='missile_shield')
+			div(class='structure_details')
+				div(class='structure_title') Tarcza rakietowa
+				div(class='structure_lvlbox')
+					div(class='structure_lvl')= 'Lv. '+ structures.defense.missile_shield
+				div(class='structure_text')= 'Aktualna moc obronna: '+ (costs.missile_shield.cash * structures.defense.missile_shield / 10)
+				div(class='structure_text')= 'Następny moc obronna: '+ (costs.missile_shield.cash * (structures.defense.missile_shield + 1) / 10)
+				div(class='structure_costs')
+					div(class='structure_upgrade', data-struct='missile_shield') Ulepsz
+					div(class='walletbox')
+						div(class='walleticon', data-type='cash') Gold
+						div(class='walletvalue')= costs.missile_shield.cash * structures.defense.missile_shield
+					div(class='walletbox')
+						div(class='walleticon', data-type='oil') Oil
+						div(class='walletvalue')= costs.missile_shield.oil * structures.defense.missile_shield
+					div(class='walletbox')
+						div(class='walleticon', data-type='gas') Gas
+						div(class='walletvalue')= costs.missile_shield.gas * structures.defense.missile_shield
+					div(class='walletbox')
+						div(class='walleticon', data-type='metal') Metal
+						div(class='walletvalue')= costs.missile_shield.metal * structures.defense.missile_shield
+		div(class='structure')
+			div(class='structure_image', data-type='force_shield')
+			div(class='structure_details')
+				div(class='structure_title') Pole siłowe
+				div(class='structure_lvlbox')
+					div(class='structure_lvl')= 'Lv. '+ structures.defense.force_shield
+				div(class='structure_text')= 'Aktualna moc obronna: '+ (costs.force_shield.cash * structures.defense.force_shield / 10)
+				div(class='structure_text')= 'Następny moc obronna: '+ (costs.force_shield.cash * (structures.defense.force_shield + 1) / 10)
+				div(class='structure_costs')
+					div(class='structure_upgrade', data-struct='force_shield') Ulepsz
+					div(class='walletbox')
+						div(class='walleticon', data-type='cash') Gold
+						div(class='walletvalue')= costs.force_shield.cash * structures.defense.force_shield
+					div(class='walletbox')
+						div(class='walleticon', data-type='oil') Oil
+						div(class='walletvalue')= costs.force_shield.oil * structures.defense.force_shield
+					div(class='walletbox')
+						div(class='walleticon', data-type='gas') Gas
+						div(class='walletvalue')= costs.force_shield.gas * structures.defense.force_shield
+					div(class='walletbox')
+						div(class='walleticon', data-type='metal') Metal
+						div(class='walletvalue')= costs.force_shield.metal * structures.defense.force_shield
+		div(class='structure')
+			div(class='structure_image', data-type='weapon_laser')
+			div(class='structure_details')
+				div(class='structure_title') Działko laserowe
+				div(class='structure_lvlbox')
+					div(class='structure_lvl')= 'Lv. '+ structures.defense.weapon_laser
+				div(class='structure_text')= 'Aktualna moc obronna: '+ (costs.weapon_laser.cash * structures.defense.weapon_laser / 10)
+				div(class='structure_text')= 'Następny moc obronna: '+ (costs.weapon_laser.cash * (structures.defense.weapon_laser + 1) / 10)
+				div(class='structure_costs')
+					div(class='structure_upgrade', data-struct='weapon_laser') Ulepsz
+					div(class='walletbox')
+						div(class='walleticon', data-type='cash') Gold
+						div(class='walletvalue')= costs.weapon_laser.cash * structures.defense.weapon_laser
+					div(class='walletbox')
+						div(class='walleticon', data-type='oil') Oil
+						div(class='walletvalue')= costs.weapon_laser.oil * structures.defense.weapon_laser
+					div(class='walletbox')
+						div(class='walleticon', data-type='gas') Gas
+						div(class='walletvalue')= costs.weapon_laser.gas * structures.defense.weapon_laser
+					div(class='walletbox')
+						div(class='walleticon', data-type='metal') Metal
+						div(class='walletvalue')= costs.weapon_laser.metal * structures.defense.weapon_laser
+		div(class='structure')
+			div(class='structure_image', data-type='rockets')
+			div(class='structure_details')
+				div(class='structure_title') Przeciwrakieta
+				div(class='structure_lvlbox')
+					div(class='structure_lvl')= 'Lv. '+ structures.defense.rockets
+				div(class='structure_text')= 'Aktualna moc obronna: '+ (costs.rockets.cash * structures.defense.rockets / 10)
+				div(class='structure_text')= 'Następny moc obronna: '+ (costs.rockets.cash * (structures.defense.rockets + 1) / 10)
+				div(class='structure_costs')
+					div(class='structure_upgrade', data-struct='rockets') Ulepsz
+					div(class='walletbox')
+						div(class='walleticon', data-type='cash') Gold
+						div(class='walletvalue')= costs.rockets.cash * structures.defense.rockets
+					div(class='walletbox')
+						div(class='walleticon', data-type='oil') Oil
+						div(class='walletvalue')= costs.rockets.oil * structures.defense.rockets
+					div(class='walletbox')
+						div(class='walleticon', data-type='gas') Gas
+						div(class='walletvalue')= costs.rockets.gas * structures.defense.rockets
+					div(class='walletbox')
+						div(class='walleticon', data-type='metal') Metal
+						div(class='walletvalue')= costs.rockets.metal * structures.defense.rockets
+		div(class='structure')
+			div(class='structure_image', data-type='plasma')
+			div(class='structure_details')
+				div(class='structure_title') Działo plazma
+				div(class='structure_lvlbox')
+					div(class='structure_lvl')= 'Lv. '+ structures.defense.plasma
+				div(class='structure_text')= 'Aktualna moc obronna: '+ (costs.plasma.cash * structures.defense.plasma / 10)
+				div(class='structure_text')= 'Następny moc obronna: '+ (costs.plasma.cash * (structures.defense.plasma + 1) / 10)
+				div(class='structure_costs')
+					div(class='structure_upgrade', data-struct='plasma') Ulepsz
+					div(class='walletbox')
+						div(class='walleticon', data-type='cash') Gold
+						div(class='walletvalue')= costs.plasma.cash * structures.defense.plasma
+					div(class='walletbox')
+						div(class='walleticon', data-type='oil') Oil
+						div(class='walletvalue')= costs.plasma.oil * structures.defense.plasma
+					div(class='walletbox')
+						div(class='walleticon', data-type='gas') Gas
+						div(class='walletvalue')= costs.plasma.gas * structures.defense.plasma
+					div(class='walletbox')
+						div(class='walleticon', data-type='metal') Metal
+						div(class='walletvalue')= costs.plasma.metal * structures.defense.plasma
+		

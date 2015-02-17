@@ -173,12 +173,12 @@ $(document).ready(function() {
 				   data: JSON.stringify(postdata),
 				   success: function (result) {
 				   	if(result == 'success') $('div.inputstatus#username').css('display', 'none').html('');
-					   else if(result == 'fail') $('div.inputstatus#username').css('display', 'block').html('That username is already taken.');
+					   else if(result == 'fail') $('div.inputstatus#username').css('display', 'block').html('Ten użytkownik jest zajęty.');
 					   checkForm();
 				   }
 				});
 			}
-			else $('div.inputstatus#username').css('display', 'block').html('Min. 3 signs.');
+			else $('div.inputstatus#username').css('display', 'block').html('Min. 3 znaki.');
 		});
 		$('input[name="login"]').on('input', function() {
 			login = $(this).val();
@@ -191,17 +191,17 @@ $(document).ready(function() {
 				   data: JSON.stringify(postdata),
 				   success: function (result) {
 				   	if(result == 'success') $('div.inputstatus#login').css('display', 'none').html('');
-					   else if(result == 'fail') $('div.inputstatus#login').css('display', 'block').html('That login is already taken.');
+					   else if(result == 'fail') $('div.inputstatus#login').css('display', 'block').html('Ten login jest zajęty.');
 						checkForm();
 					}
 				});
 			}
-			else $('div.inputstatus#login').css('display', 'block').html('Min. 3 signs.');
+			else $('div.inputstatus#login').css('display', 'block').html('Min. 3 znaki.');
 		});
 		$('input[name="password"]').on('input', function() {
 			password = $(this).val();
 			if(password.length >= 3) $('div.inputstatus#password').css('display', 'none').html('');
-			else $('div.inputstatus#password').css('display', 'block').html('Min. 3 signs.');
+			else $('div.inputstatus#password').css('display', 'block').html('Min. 3 znaki.');
 			checkForm();
 		});
 	}
@@ -261,5 +261,8 @@ $(document).ready(function() {
 			else $('div.inputstatus#password').css('display', 'block').html('Min. 3 signs.');
 			checkForm();
 		});
+	}
+	else if(site == '/defense') {
+		$('body').css('background-image', 'url(../images/defense.jpg)');
 	}
 });
