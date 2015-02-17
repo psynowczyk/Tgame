@@ -58,10 +58,10 @@ var incomeInterval = setInterval(function () {
 					else {
 						Wallet.update({'owner': user._id}, {
 							$inc: {
-								cash: (structure.income.gold_mine * cost.gold_mine.cash / 3),
-								oil: (structure.income.oil_rig * cost.oil_rig.oil / 3),
-								gas: (structure.income.gas_rig * cost.gas_rig.gas / 3),
-								metal: (structure.income.metal_mine * cost.metal_mine.metal / 3)
+								cash: (structure.income.gold_mine * cost.gold_mine.cash / 10),
+								oil: (structure.income.oil_rig * cost.oil_rig.oil / 10),
+								gas: (structure.income.gas_rig * cost.gas_rig.gas / 10),
+								metal: (structure.income.metal_mine * cost.metal_mine.metal / 10)
 							}
 						}, function (err) {
 							console.log('Wallet updated');
@@ -75,7 +75,7 @@ var incomeInterval = setInterval(function () {
 	}).on('end', function () {
 		console.log('Wallets updated');
 	});
-}, 10000);
+}, 60000);
 
 passport.serializeUser(function(user, done) {
    done(null, user.id);
@@ -127,16 +127,20 @@ passport.use('local-signup', new LocalStrategy({
 															Planet.findOne(function(err, neib) {
 																if (!neib) {
 																	var neib = new Planet();
-																	neib.coordinates = [0,0,0];
+																	neib.coordinates.x = 0;
+																	neib.coordinates.y = 0;
 																}
 																if (!err) {
 																	function saveIfNotExists(newPlanet, neib) {
-																		for (var x = 0; x < 3; x++) {
-																			var op = Math.floor((Math.random() * 2) + 1);
-																			if (op == 1) newPlanet.coordinates[x] = neib.coordinates[x] + Math.floor((Math.random() * 10) + 1);
-																			else newPlanet.coordinates[x] = neib.coordinates[x] - Math.floor((Math.random() * 10) + 1);
-																		}
-																		Planet.findOne({'coordinates': newPlanet.coordinates}, function(err, result) {
+
+																		var op = Math.floor((Math.random() * 2) + 1);
+																		if (op == 1) newPlanet.coordinates.x = neib.coordinates.x + Math.floor((Math.random() * 10) + 2);
+																		else newPlanet.coordinates.x = neib.coordinates.x - Math.floor((Math.random() * 10) + 2);
+																		op = Math.floor((Math.random() * 2) + 1);
+																		if (op == 1) newPlanet.coordinates.y = neib.coordinates.y + Math.floor((Math.random() * 10) + 2);
+																		else newPlanet.coordinates.y = neib.coordinates.y - Math.floor((Math.random() * 10) + 2);
+																		
+																		Planet.findOne({'coordinates.x': newPlanet.coordinates.x, 'coordinates.y': newPlanet.coordinates.y}, function(err, result) {
 																			if (err) throw err;
 																			if (!result) {
 																				newPlanet.save(function(err) {
