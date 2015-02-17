@@ -1,0 +1,25 @@
+#weaponsbox					{width: 760px; height: 100%; overflow: auto;}
+	.weapon					{margin-bottom: 15px; width: 100%; height: 150px; background-color: #e6e6e6; border-radius: 2px;}
+	.weapon:last-child	{margin-bottom: 0;}
+	.weapon_image			{margin-right: 10px; padding: 3px; width: 216px; height: 144px; background-origin: content-box; background-repeat: no-repeat;}
+	.weapon_image[data-type="missile"]	{background-image: url(../images/weapons/missile.jpg);}
+	.weapon_image[data-type="heavy_missile"]	{background-image: url(../images/weapons/heavy_missile.jpg);}
+	.weapon_image[data-type="antimatter"]	{background-image: url(../images/weapons/antimatter.jpg);}
+	.weapon_details		{width: calc(~'100% - 232px');}
+	.weapon_title			{font: normal 22px opensans_light; margin-bottom: 7px; width: 100%;}
+	.weapon_lvlbox			{width: 100%; margin-bottom: 7px;}
+		.weapon_lvl			{font-size: 16px; padding: 2px 15px; background-color: #ffffff; border: 1px solid #cccccc; border-radius: 2px;}
+	.weapon_text			{width: 100%;}
+	.weapon_costs			{margin-top: 5px; width: 100%;}
+		.weapon_upgrade		{font: normal 13px opensans_semibold; padding: 0 15px; height: 24px; line-height: 24px; border-radius: 2px; color: #ffffff; text-shadow: 0px -1px 0px #0e9900;
+			background: #13cc00; /* Old browsers */
+			background: -moz-linear-gradient(top, #13cc00 0%, #11b300 100%); /* FF3.6+ */
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#13cc00), color-stop(100%,#11b300)); /* Chrome,Safari4+ */
+			background: -webkit-linear-gradient(top, #13cc00 0%,#11b300 100%); /* Chrome10+,Safari5.1+ */
+			background: -o-linear-gradient(top, #13cc00 0%,#11b300 100%); /* Opera 11.10+ */
+			background: -ms-linear-gradient(top, #13cc00 0%,#11b300 100%); /* IE10+ */
+			background: linear-gradient(to bottom, #13cc00 0%,#11b300 100%); /* W3C */
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#13cc00', endColorstr='#11b300',GradientType=0); /* IE6-9 */
+		}
+		.weapon_costs .walletbox	{margin: 0 0 0 10px;}
+	.weapon_upgrade:hover	{cursor: pointer; background: #127db3; text-shadow: none;}

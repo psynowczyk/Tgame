@@ -72,6 +72,23 @@ $(document).ready(function() {
 			});
 		});
 	}
+	else if(site == '/weapons') {
+		$('body').css('background-image', 'url(../images/weapons/bg_weapons.jpg)');
+		$('.weapon_upgrade').on('click', function (){
+			var structure = $(this).attr('data-struct');
+			var postdata = {'action': 'upgrade-structure', 'structure': structure};
+			$.ajax({
+			   url: '/structures',
+			   type: 'POST',
+			   contentType: 'application/json',
+			   data: JSON.stringify(postdata),
+			   success: function (result) {
+			   	if(result == 'success') window.location.href = '/weapons';
+				   else if(result == 'fail:resources') alert('Brak środków.');
+			   }
+			});
+		});
+	}
 	else if(site == '/observatory') {
 		$('body').css('background-image', 'none');
 		$('#spacemapbox').css('background-image', 'url(images/ajaxloader.gif)');

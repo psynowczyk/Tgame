@@ -11,6 +11,11 @@ var structureSchema = mongoose.Schema({
       'technology': {
       	'observatory': {type: Number, default: 1},
       	'laboratory': {type: Number, default: 1}
+      },
+      'weapons': {
+            'missile': {type: Number, default: 0},
+            'heavy_missile': {type: Number, default: 0},
+            'antimatter': {type: Number, default: 0}
       }
 });
 

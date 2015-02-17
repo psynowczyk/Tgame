@@ -103,6 +103,7 @@ module.exports = function (app, passport) {
 			var structure_type = '';
 			if (structure == 'gold_mine' || structure == 'oil_rig' || structure == 'gas_rig' || structure == 'metal_mine') structure_type = 'income';
 			else if (structure == 'observatory' || structure == 'laboratory') structure_type = 'technology';
+			else if (structure == 'missile' || structure == 'heavy_missile' || structure == 'antimatter') structure_type = 'weapons';
 			console.log(structure_type); // COmMENT
 			Structure.findOne({'owner': req.user._id}, function (err, structures) {
 				if(!err && structures) {
@@ -209,6 +210,19 @@ module.exports = function (app, passport) {
 		}
 	});
 
+	//WEAPONS
+	app.get('/weapons', isLoggedIn, function (req, res, next) {
+		Structure.findOne({'owner': req.user._id}, function (err, structures) {
+			if(!err && structures) {
+				Cost.findOne({'id': 1}, function (err, costs) {
+					if(!err && costs) res.render('weapons', {'structures': structures, 'costs': costs});
+					else console.log(err);
+				});
+			}
+			else console.log(err);
+		});
+	});
+	
 	// SIGNUP
 	app.get('/signup', isLoggedOut, function (req, res) {
 		res.render('signup', {'title': 'Rejestracja'});

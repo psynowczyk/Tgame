@@ -1,0 +1,70 @@
+extends layout
+
+block content
+	div(id='weaponsbox')
+		div(class='weapon')
+			div(class='weapon_image', data-type='missile')
+			div(class='weapon_details')
+				div(class='weapon_title') Rakieta miedzyplanetarna
+				div(class='weapon_lvlbox')
+					div(class='weapons_lvl')= 'Lv. '+ structures.weapons.missile
+				div(class='weapon_text')= 'Moc rakiety: '+ (costs.missile.cash * structures.weapons.missile)
+				div(class='weapon_text')= 'Moc po ulepszeniu: '+ (costs.missile.cash * structures.weapons.missile +100)
+				div(class='weapon_costs')
+					div(class='weapon_upgrade', data-struct='missile') Ulepsz
+					div(class='walletbox')
+						div(class='walleticon', data-type='cash') Gold
+						div(class='walletvalue')= costs.missile.cash * structures.weapons.missile + 100
+					div(class='walletbox')
+						div(class='walleticon', data-type='oil') Oil
+						div(class='walletvalue')= costs.missile.oil * structures.weapons.missile +100
+					div(class='walletbox')
+						div(class='walleticon', data-type='gas') Gas
+						div(class='walletvalue')= costs.missile.gas * structures.weapons.missile +100
+					div(class='walletbox')
+						div(class='walleticon', data-type='metal') Metal
+						div(class='walletvalue')= costs.missile.metal * structures.weapons.missile +100
+		div(class='weapon')
+			div(class='weapon_image', data-type='heavy_missile')
+			div(class='weapon_details')
+				div(class='weapon_title') Ciezka rakieta miedzyplanetarna
+				div(class='weapon_lvlbox')
+					div(class='weapons_lvl')= 'Lv. '+ structures.weapons.heavy_missile
+				div(class='weapon_text')= 'Moc rakiety: '+ (costs.heavy_missile.cash * structures.weapons.heavy_missile)
+				div(class='weapon_text')= 'Moc po ulepszeniu: '+ (costs.heavy_missile.cash * structures.weapons.heavy_missile +1000)
+				div(class='weapon_costs')
+					div(class='weapon_upgrade', data-struct='heavy_missile') Ulepsz
+					div(class='walletbox')
+						div(class='walleticon', data-type='cash') Gold
+						div(class='walletvalue')= costs.heavy_missile.cash * structures.weapons.heavy_missile + 1000
+					div(class='walletbox')
+						div(class='walleticon', data-type='oil') Oil
+						div(class='walletvalue')= costs.heavy_missile.oil * structures.weapons.heavy_missile + 1000
+					div(class='walletbox')
+						div(class='walleticon', data-type='gas') Gas
+						div(class='walletvalue')= costs.heavy_missile.gas * structures.weapons.heavy_missile + 1000
+					div(class='walletbox')
+						div(class='walleticon', data-type='metal') Metal
+						div(class='walletvalue')= costs.heavy_missile.metal * structures.weapons.heavy_missile + 1000
+		div(class='weapon')
+			div(class='weapon_image', data-type='antimatter')
+			div(class='weapon_details')
+				div(class='weapon_title') Antymateria
+				div(class='weapon_lvlbox')
+					div(class='weapons_lvl')= 'Lv. '+ structures.weapons.antimatter
+				div(class='weapon_text')= 'Moc rakiety: '+ (costs.antimatter.cash * structures.weapons.antimatter)
+				div(class='weapon_text')= 'Moc po ulepszeniu: '+ (costs.antimatter.cash * structures.weapons.antimatter +20000)
+				div(class='weapon_costs')
+					div(class='weapon_upgrade', data-struct='antimatter') Ulepsz
+					div(class='walletbox')
+						div(class='walleticon', data-type='cash') Gold
+						div(class='walletvalue')= costs.antimatter.cash * structures.weapons.antimatter + 20000
+					div(class='walletbox')
+						div(class='walleticon', data-type='oil') Oil
+						div(class='walletvalue')= costs.antimatter.oil * structures.weapons.antimatter + 20000
+					div(class='walletbox')
+						div(class='walleticon', data-type='gas') Gas
+						div(class='walletvalue')= costs.antimatter.gas * structures.weapons.antimatter + 20000
+					div(class='walletbox')
+						div(class='walleticon', data-type='metal') Metal
+						div(class='walletvalue')= costs.antimatter.metal * structures.weapons.antimatter + 20000
