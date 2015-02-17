@@ -160,10 +160,7 @@ module.exports = function (app, passport) {
 		req.logout();
 		res.redirect('/');
 	});
-	// MAP
-	app.get('/map', isLoggedIn, function (req, res) {
-	res.render('map');
-	});
+
 }
 
 function isLoggedIn(req, res, next) {
