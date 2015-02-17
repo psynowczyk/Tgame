@@ -31,7 +31,39 @@ var costSchema = mongoose.Schema({
          'oil': {type: Number, default: 50},
          'gas': {type: Number, default: 50},
          'metal': {type: Number, default: 50}
+      },
+      'missile_shield': {
+         'cash': {type: Number, default: 150},
+         'oil': {type: Number, default: 10},
+         'gas': {type: Number, default: 10},
+         'metal': {type: Number, default: 500}
+      },
+      'force_shield': {
+         'cash': {type: Number, default: 1000},
+         'oil': {type: Number, default: 10},
+         'gas': {type: Number, default: 100},
+         'metal': {type: Number, default: 500}
+      },
+      'weapon_laser': {
+         'cash': {type: Number, default: 1500},
+         'oil': {type: Number, default: 1000},
+         'gas': {type: Number, default: 1000},
+         'metal': {type: Number, default: 2000}
+      },
+      'rockets': {
+         'cash': {type: Number, default: 1500},
+         'oil': {type: Number, default: 100},
+         'gas': {type: Number, default: 100},
+         'metal': {type: Number, default: 5000}
+      },
+      'plasma': {
+         'cash': {type: Number, default: 2000},
+         'oil': {type: Number, default: 1000},
+         'gas': {type: Number, default: 1000},
+         'metal': {type: Number, default: 1000}
       }
+
+
 });
 
 module.exports = mongoose.model('Cost', costSchema);

@@ -11,7 +11,17 @@ var structureSchema = mongoose.Schema({
       'technology': {
       	'observatory': {type: Number, default: 1},
       	'laboratory': {type: Number, default: 1}
+      },
+      'defense':{
+            'missile_shield': {type: Number, default: 0},
+            'force_shield': {type: Number, default: 0},
+            'weapon_laser': {type: Number, default: 0},
+            'rockets': {type: Number, default: 0},
+            'plasma': {type: Number, default: 0}
+
+
       }
+
 });
 
 module.exports = mongoose.model('Structure', structureSchema);

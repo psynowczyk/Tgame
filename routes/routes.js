@@ -229,6 +229,18 @@ module.exports = function (app, passport) {
 		req.logout();
 		res.redirect('/');
 	});
+	// DEFENSE
+	app.get('/defense', isLoggedIn, function (req, res) {
+		Structure.findOne({'owner': req.user._id}, function (err, structures) {
+			if(!err && structures) {
+				Cost.findOne({'id': 1}, function (err, costs) {
+					if(!err && costs) res.render('defense', {'structures': structures, 'costs': costs});
+					else console.log(err);
+				});
+			}
+			else console.log(err);
+		});
+	});
 
 }
 

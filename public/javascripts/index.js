@@ -205,4 +205,8 @@ $(document).ready(function() {
 			checkForm();
 		});
 	}
+	else if(site == '/defense') {
+		$('body').css('background-image', 'url(../images/defense.jpg)');
+		
+	}
 });
