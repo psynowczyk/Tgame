@@ -5,12 +5,17 @@ html
 		link(rel='stylesheet', href='/stylesheets/style.css')
 		link(rel='stylesheet', href='/stylesheets/index.css')
 		link(rel='stylesheet', href='/stylesheets/signup.css')
+		link(rel='stylesheet', href='/stylesheets/dashboard.css')
+		link(rel='stylesheet', href='/stylesheets/structures.css')
+		link(rel='stylesheet', href='/stylesheets/observatory.css')
 		script(src="/javascripts/jquery-2.1.1.min.js")
 		script(src="/javascripts/index.js")
 	body
 		div(id='header')
 			if loggedIn
-				a(href='/' class='navilink') Kokpit
+				a(href='/dashboard' class='navilink') Kokpit
+				a(href='/structures' class='navilink') Kopalnie
+				a(href='/observatory' class='navilink') Obserwatorium
 			else
 				a(href='/' class='navilink') Strona główna
 				a(href='/signup' class='navilink') Rejestracja
@@ -33,6 +38,15 @@ html
 						div(class='useroption')
 							a(href='/logout') wyloguj
 					div(id='usermenu', status='0')= username
-					div(id='walletbox')
-						div(id='walleticon') $
-						div(id='walletvalue')= wallet
+					div(class='walletbox')
+						div(class='walleticon', data-type='cash') Gold
+						div(class='walletvalue', data-type='cash')= cash
+					div(class='walletbox')
+						div(class='walleticon', data-type='oil') Oil
+						div(class='walletvalue', data-type='oil')= oil
+					div(class='walletbox')
+						div(class='walleticon', data-type='gas') Gas
+						div(class='walletvalue', data-type='gas')= gas
+					div(class='walletbox')
+						div(class='walleticon', data-type='metal') Metal
+						div(class='walletvalue', data-type='metal')= metal
