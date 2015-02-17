@@ -2,9 +2,6 @@ var site = window.location.pathname;
 
 $(document).ready(function() {
 
-	var window_height = $(window).height();
-	var window_width = $(window).width();
-	$('#container').css({'width': (window_width-200) +'px', 'height': (window_height-250) +'px'});
 	$('a.navilink[href="'+ site +'"]').css({'background-color': '#0d5980', 'color': '#ffffff', 'box-shadow': 'inset 0px 3px 4px 0px #0a4766'});
 	$('#useroptions').css({'margin-top': ($('#useroptions').height() * -1) +'px'});
 	$('#usermenu').on('click', function () {
@@ -18,6 +15,24 @@ $(document).ready(function() {
 			$('#usermenu').attr('status', '0');
 		}
 	});
+
+	var incomeInterval = setInterval(function () {
+		var postdata = {'action': 'get-wallet'};
+		$.ajax({
+		   url: '/',
+		   type: 'POST',
+		   contentType: 'application/json',
+		   data: JSON.stringify(postdata),
+		   success: function (result) {
+		   	if(result != 'fail') {
+		   		$('.walletvalue[data-type="cash"]').html(result.cash);
+		   		$('.walletvalue[data-type="oil"]').html(result.oil);
+		   		$('.walletvalue[data-type="gas"]').html(result.gas);
+		   		$('.walletvalue[data-type="metal"]').html(result.metal);
+		   	}
+		   }
+		});
+	}, 20000);
 
 	if(site == '/') {
 		
@@ -52,6 +67,91 @@ $(document).ready(function() {
 			   data: JSON.stringify(postdata),
 			   success: function (result) {
 			   	if(result == 'success') window.location.href = '/structures';
+				   else if(result == 'fail:resources') alert('Brak środków.');
+			   }
+			});
+		});
+	}
+	else if(site == '/observatory') {
+		$('body').css('background-image', 'none');
+		$('#spacemapbox').css('background-image', 'url(images/ajaxloader.gif)');
+
+		var postdata = {'action': 'load-spacemap'};
+		$.ajax({
+		   url: '/observatory',
+		   type: 'POST',
+		   contentType: 'application/json',
+		   data: JSON.stringify(postdata),
+		   success: function (result) {
+		   	if(result != 'fail') {
+		   		$('#spacemapbox').css('background-image', 'none');
+		   		var details = result[result.length - 1].split(':');
+		   		var oblvl = parseInt(details[0]);
+		   		var owpx = parseInt(details[1]);
+		   		var owpy = parseInt(details[2]);
+		   		var rangecount = 9 + (oblvl*2);
+		   		var boxwidth = Math.floor($('#spacemapbox').width() / rangecount);
+		   		for (var x = 0; x < rangecount*rangecount; x++) {
+		   			var ox = owpx-((rangecount-1)/2)+(x%rangecount);
+		   			var oy = owpy+((rangecount-1)/2)-(Math.floor(x/rangecount));
+		   			$('#spacemapbox').append('<div class="spacemap_object" data-cx="'+ ox +'" data-cy="'+ oy +'" data-objtype="0" data-status="0" style="width:'+ (boxwidth-2) +'px; height:'+ (boxwidth-2) +'px;"></div>');
+		   		}
+		   		for (var x = 0; x < result.length - 1; x++) {
+		   			var ox = result[x].coordinates.x;
+		   			var oy = result[x].coordinates.y;
+		   			$('.spacemap_object[data-cx='+ ox +'][data-cy='+ oy +']').attr('data-objtype', '1').css('background-image', 'url(images/planets/'+ result[x].image +'.jpg)');
+		   		}
+		   	}
+			   else if(result == 'fail') $('#spacemapbox').html('Could not load the map.');
+		   }
+		});
+
+		$(document).on('click', '.spacemap_object[data-objtype="1"]', function () {
+			var that = $(this);
+			var status = that.attr('data-status');
+			if (status == 0) {
+				var tempwidth = that.width();
+				var postdata = {'action': 'get-spaceobjdetails', 'coordinates': $(this).attr('data-cx') +':'+ $(this).attr('data-cy')};
+				$.ajax({
+				   url: '/observatory',
+				   type: 'POST',
+				   contentType: 'application/json',
+				   data: JSON.stringify(postdata),
+				   success: function (result) {
+				   	if(result != 'fail') {
+				   		that.attr('data-status', '1');
+				   		var objdetails = result[0];
+				   		var owner = result[1].local;
+				   		var userID = result[2];
+				   		var spacemapengage = '<div class="spacemap_engage" data-cx="'+ objdetails.coordinates.x +'" data-cy="'+ objdetails.coordinates.y +'">zaatakuj</div>';
+				   		if (userID == result[1]._id) spacemapengage = '';
+				   		that.html(
+				   			'<div class="spacemap_objdetails" style="margin-left:'+ tempwidth +'px;">'+
+				   				'<div class="spacemap_objdetail">Właściciel: '+ owner.username +'</div>'+
+				   				'<div class="spacemap_objdetail">Współrzędne: '+ objdetails.coordinates.x +' : '+ objdetails.coordinates.y +'</div>'+
+				   				spacemapengage +
+				   			'</div>'
+				   		);
+				   	}
+				   }
+				});
+			}
+			else {
+				that.html('');
+				that.attr('data-status', '0');
+			}
+		});
+
+		$('.structure_upgrade').on('click', function (){
+			var structure = $(this).attr('data-struct');
+			var postdata = {'action': 'upgrade-structure', 'structure': structure};
+			$.ajax({
+			   url: '/structures',
+			   type: 'POST',
+			   contentType: 'application/json',
+			   data: JSON.stringify(postdata),
+			   success: function (result) {
+			   	if(result == 'success') window.location.href = '/observatory';
 				   else if(result == 'fail:resources') alert('Brak środków.');
 			   }
 			});
