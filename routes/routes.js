@@ -243,6 +243,49 @@ module.exports = function (app, passport) {
 		req.logout();
 		res.redirect('/');
 	});
+	// DEFENSE
+	app.get('/defense', isLoggedIn, function (req, res) {
+		Structure.findOne({'owner': req.user._id}, function (err, structures) {
+			if(!err && structures) {
+				Cost.findOne({'id': 1}, function (err, costs) {
+					if(!err && costs) res.render('defense', {'structures': structures, 'costs': costs});
+					else console.log(err);
+				});
+			}
+			else console.log(err);
+		});
+	});
+
+	// EDIT PROFILE
+	app.get('/editprofile', isLoggedIn, function (req, res, next) {
+		User.findOne({'_id': req.user._id}, function (err, user){
+			if(!err && user) res.render('editprofile', {'user': user});
+			else console.log(err);
+		});
+	});
+	// EDIT PROFILE
+	app.post('/editprofile', isLoggedIn, function (req, res, next) {
+		var us = '', lo = '', pa = '';
+		if (typeof(req.body.username) != 'undefined') us = req.body.username;
+		if (typeof(req.body.login) != 'undefined') lo = req.body.login;
+		if (typeof(req.body.password) != 'undefined') pa = req.body.password;
+		if (us.length == 0) us = req.user.local.username;
+		if (lo.length == 0) lo = req.user.local.login;
+		if (pa.length == 0) pa = req.user.local.password;
+		User.update(
+			{'owner': req.user._id}, 
+			{$set: {
+				'local.username': us,
+				'local.login': lo,
+				'local.password': pa
+				}
+			},
+			function (err) {
+				if (err) console.log(err);
+				else res.redirect('/dashboard');
+			}
+		);
+	});
 
 }
 

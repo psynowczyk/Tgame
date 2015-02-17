@@ -190,12 +190,12 @@ $(document).ready(function() {
 				   data: JSON.stringify(postdata),
 				   success: function (result) {
 				   	if(result == 'success') $('div.inputstatus#username').css('display', 'none').html('');
-					   else if(result == 'fail') $('div.inputstatus#username').css('display', 'block').html('That username is already taken.');
+					   else if(result == 'fail') $('div.inputstatus#username').css('display', 'block').html('Ten użytkownik jest zajęty.');
 					   checkForm();
 				   }
 				});
 			}
-			else $('div.inputstatus#username').css('display', 'block').html('Min. 3 signs.');
+			else $('div.inputstatus#username').css('display', 'block').html('Min. 3 znaki.');
 		});
 		$('input[name="login"]').on('input', function() {
 			login = $(this).val();
@@ -208,18 +208,78 @@ $(document).ready(function() {
 				   data: JSON.stringify(postdata),
 				   success: function (result) {
 				   	if(result == 'success') $('div.inputstatus#login').css('display', 'none').html('');
-					   else if(result == 'fail') $('div.inputstatus#login').css('display', 'block').html('That login is already taken.');
+					   else if(result == 'fail') $('div.inputstatus#login').css('display', 'block').html('Ten login jest zajęty.');
 						checkForm();
 					}
 				});
 			}
+			else $('div.inputstatus#login').css('display', 'block').html('Min. 3 znaki.');
+		});
+		$('input[name="password"]').on('input', function() {
+			password = $(this).val();
+			if(password.length >= 3) $('div.inputstatus#password').css('display', 'none').html('');
+			else $('div.inputstatus#password').css('display', 'block').html('Min. 3 znaki.');
+			checkForm();
+		});
+	}
+	else if(site == '/editprofile') {
+		var username = '', login = '', password = '';
+		function checkForm () {
+			if ((username.length == 0 || username.length >= 3) && (login.length == 0 || login.length >= 3) && (password.length == 0 || password.length >= 3)) $('input[type="submit"]').attr('disabled', false);
+		}
+		$('input[name="username"]').on('input', function() {
+			var username_now = $(this).attr('placeholder');
+			username = $(this).val();
+			if(username.length >= 3) {
+				if (username_now != username) {
+					var postdata = {'action': 'uniq-username', 'username': username};
+					$.ajax({
+					   url: '/',
+					   type: 'POST',
+					   contentType: 'application/json',
+					   data: JSON.stringify(postdata),
+					   success: function (result) {
+					   	if(result == 'success') $('div.inputstatus#username').css('display', 'none').html('');
+						   else if(result == 'fail') $('div.inputstatus#username').css('display', 'block').html('That username is already taken.');
+						   checkForm();
+					   }
+					});
+				}
+			}
+			else if(username.length == 0) $('div.inputstatus#username').css('display', 'none').html('');
+			else $('div.inputstatus#username').css('display', 'block').html('Min. 3 signs.');
+		});
+		$('input[name="login"]').on('input', function() {
+			var login_now = $(this).attr('placeholder');
+			login = $(this).val();
+			if(login.length >= 3) {
+				if (login_now != login) {
+					var postdata = {'action': 'uniq-login', 'login': login};
+					$.ajax({
+					   url: '/',
+					   type: 'POST',
+					   contentType: 'application/json',
+					   data: JSON.stringify(postdata),
+					   success: function (result) {
+					   	if(result == 'success') $('div.inputstatus#login').css('display', 'none').html('');
+						   else if(result == 'fail') $('div.inputstatus#login').css('display', 'block').html('That login is already taken.');
+							checkForm();
+						}
+					});
+				}
+			}
+			else if(username.length == 0) $('div.inputstatus#login').css('display', 'none').html('');
 			else $('div.inputstatus#login').css('display', 'block').html('Min. 3 signs.');
 		});
 		$('input[name="password"]').on('input', function() {
 			password = $(this).val();
 			if(password.length >= 3) $('div.inputstatus#password').css('display', 'none').html('');
+			else if(username.length == 0) $('div.inputstatus#login').css('display', 'none').html('');
 			else $('div.inputstatus#password').css('display', 'block').html('Min. 3 signs.');
 			checkForm();
 		});
+	}
+	else if(site == '/defense') {
+		$('body').css('background-image', 'url(../images/defense.jpg)');
 	}
 });

@@ -16,6 +16,13 @@ var structureSchema = mongoose.Schema({
             'missile': {type: Number, default: 0},
             'heavy_missile': {type: Number, default: 0},
             'antimatter': {type: Number, default: 0}
+      },
+      'defense':{
+            'missile_shield': {type: Number, default: 0},
+            'force_shield': {type: Number, default: 0},
+            'weapon_laser': {type: Number, default: 0},
+            'rockets': {type: Number, default: 0},
+            'plasma': {type: Number, default: 0}
       }
 });
 
