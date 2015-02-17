@@ -9,8 +9,8 @@ var structureSchema = mongoose.Schema({
       	'metal_mine': {type: Number, default: 1}
       },
       'technology': {
-      	'observatory': {type: Number, default: 0},
-      	'laboratory': {type: Number, default: 0}
+      	'observatory': {type: Number, default: 1},
+      	'laboratory': {type: Number, default: 1}
       }
 });
 

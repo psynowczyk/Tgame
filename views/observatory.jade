@@ -1,0 +1,27 @@
+extends layout
+
+block content
+	div(id='structuresbox', data-type='observatory')
+		div(class='structure')
+			div(class='structure_image', data-type='observatory')
+			div(class='structure_details')
+				div(class='structure_title') Obserwatorium
+				div(class='structure_lvlbox')
+					div(class='structure_lvl')= 'Lv. '+ structures.technology.observatory
+				div(class='structure_text')= 'Zasięg widzenia: '+ (9 + (structures.technology.observatory * 2)) +' x '+ (9 + (structures.technology.observatory * 2))
+				div(class='structure_text')= 'Następny zasięg: '+ (9 + ((structures.technology.observatory + 1) * 2)) +' x '+ (9 + ((structures.technology.observatory + 1) * 2))
+				div(class='structure_costs')
+					div(class='structure_upgrade', data-struct='observatory') Ulepsz
+					div(class='walletbox')
+						div(class='walleticon', data-type='cash') Gold
+						div(class='walletvalue')= costs.observatory.cash * structures.technology.observatory
+					div(class='walletbox')
+						div(class='walleticon', data-type='oil') Oil
+						div(class='walletvalue')= costs.observatory.oil * structures.technology.observatory
+					div(class='walletbox')
+						div(class='walleticon', data-type='gas') Gas
+						div(class='walletvalue')= costs.observatory.gas * structures.technology.observatory
+					div(class='walletbox')
+						div(class='walleticon', data-type='metal') Metal
+						div(class='walletvalue')= costs.observatory.metal * structures.technology.observatory
+	div(id='spacemapbox')
