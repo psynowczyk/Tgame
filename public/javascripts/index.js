@@ -56,7 +56,7 @@ $(document).ready(function() {
 		});
 	}
 	else if(site == '/structures') {
-		$('body').css('background-image', 'none');
+		$('body').css('background-image', 'url(../images/structures/mines.jpg');
 		$('.structure_upgrade').on('click', function (){
 			var structure = $(this).attr('data-struct');
 			var postdata = {'action': 'upgrade-structure', 'structure': structure};
