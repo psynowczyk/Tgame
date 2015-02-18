@@ -120,7 +120,7 @@ module.exports = function (app, passport) {
 			else if (structure == 'missile_shield' || structure == 'force_shield' || structure == 'weapon_laser' || structure == 'rockets' || structure == 'plasma') structure_type = 'defense';
 			Structure.findOne({'owner': req.user._id}, function (err, structures) {
 				if(!err && structures) {
-					if (structures.technology.laboratory>structures[structure_type][structure]) {
+					if (structures.technology.laboratory > structures[structure_type][structure] || structure == 'laboratory') {
 						Cost.findOne({'id': 1}, function (err, costs) {
 							if(!err && costs) {
 								Wallet.findOne({'owner': req.user._id}, function (err, wallet) {
@@ -144,7 +144,6 @@ module.exports = function (app, passport) {
 												function (err) {
 													if(err) console.log(err);
 													else {
-														console.log('wallet updated'); // COmMENT
 														var query = {$set: {}};
 														query.$set[structure_type +'.'+ structure] = structures[structure_type][structure] + 1;
 														Structure.update({'owner': req.user._id}, query, function (err) {
