@@ -66,6 +66,7 @@ $(document).ready(function() {
 			   success: function (result) {
 			   	if(result == 'success') window.location.href = '/dashboard';
 				   else if(result == 'fail:resources') alert('Brak środków.');
+				   else if(result == 'fail:lvl') alert('Zbyt niski poziom laboratorium.');
 			   }
 			});
 		});
@@ -83,6 +84,7 @@ $(document).ready(function() {
 			   success: function (result) {
 			   	if(result == 'success') window.location.href = '/structures';
 				   else if(result == 'fail:resources') alert('Brak środków.');
+				   else if(result == 'fail:lvl') alert('Zbyt niski poziom laboratorium.');
 			   }
 			});
 		});
@@ -100,6 +102,7 @@ $(document).ready(function() {
 			   success: function (result) {
 			   	if(result == 'success') window.location.href = '/weapons';
 				   else if(result == 'fail:resources') alert('Brak środków.');
+				   else if(result == 'fail:lvl') alert('Zbyt niski poziom laboratorium.');
 			   }
 			});
 		});
@@ -185,6 +188,7 @@ $(document).ready(function() {
 			   success: function (result) {
 			   	if(result == 'success') window.location.href = '/observatory';
 				   else if(result == 'fail:resources') alert('Brak środków.');
+				   else if(result == 'fail:lvl') alert('Zbyt niski poziom laboratorium.');
 			   }
 			});
 		});
@@ -307,6 +311,7 @@ $(document).ready(function() {
 			   success: function (result) {
 			   	if(result == 'success') window.location.href = '/defense';
 				   else if(result == 'fail:resources') alert('Brak środków.');
+				   else if(result == 'fail:lvl') alert('Zbyt niski poziom laboratorium.');
 			   }
 			});
 		});
