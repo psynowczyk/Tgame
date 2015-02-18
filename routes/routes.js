@@ -78,8 +78,18 @@ module.exports = function (app, passport) {
 	// DASHBOARD
 	app.get('/dashboard', isLoggedIn, function (req, res, next) {
 		Planet.findOne({'owner': req.user._id}, function (err, planet) {
-			if(!err && planet) res.render('dashboard', {'planet': planet.image});
-			else console.log(err);
+			if(!err && planet) {
+				Structure.findOne({'owner': req.user._id}, function (err, structures) {
+					if (!err && structures) {
+						Cost.findOne({'id': 1}, function (err, costs) {
+							if (!err && costs) res.render('dashboard', {'planet': planet.image, 'structures': structures, 'costs': costs});
+							else console.log('costs not found');
+						});
+					}
+					else console.log('structures not found');
+				});
+			}
+			else console.log('planet not found');
 		});
 	});
 

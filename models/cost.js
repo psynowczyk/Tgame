@@ -79,6 +79,12 @@ var costSchema = mongoose.Schema({
          'oil': {type: Number, default: 1000},
          'gas': {type: Number, default: 1000},
          'metal': {type: Number, default: 1000}
+      },
+      'laboratory': {
+         'cash': {type: Number, default: 20000},
+         'oil': {type: Number, default: 10000},
+         'gas': {type: Number, default: 5000},
+         'metal': {type: Number, default: 10000}
       }
 });
 
