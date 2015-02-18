@@ -281,5 +281,19 @@ $(document).ready(function() {
 	}
 	else if(site == '/defense') {
 		$('body').css('background-image', 'url(../images/defense.jpg)');
+		$('.structure_upgrade').on('click', function (){
+			var structure = $(this).attr('data-struct');
+			var postdata = {'action': 'upgrade-structure', 'structure': structure};
+			$.ajax({
+			   url: '/structures',
+			   type: 'POST',
+			   contentType: 'application/json',
+			   data: JSON.stringify(postdata),
+			   success: function (result) {
+			   	if(result == 'success') window.location.href = '/defense';
+				   else if(result == 'fail:resources') alert('Brak środków.');
+			   }
+			});
+		});
 	}
 });

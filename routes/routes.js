@@ -104,6 +104,7 @@ module.exports = function (app, passport) {
 			if (structure == 'gold_mine' || structure == 'oil_rig' || structure == 'gas_rig' || structure == 'metal_mine') structure_type = 'income';
 			else if (structure == 'observatory' || structure == 'laboratory') structure_type = 'technology';
 			else if (structure == 'missile' || structure == 'heavy_missile' || structure == 'antimatter') structure_type = 'weapons';
+			else if (structure == 'missile_shield' || structure == 'force_shield' || structure == 'weapon_laser' || structure == 'rockets' || structure == 'plasma') structure_type = 'defense';
 			console.log(structure_type); // COmMENT
 			Structure.findOne({'owner': req.user._id}, function (err, structures) {
 				if(!err && structures) {
