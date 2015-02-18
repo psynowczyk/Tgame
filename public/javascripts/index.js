@@ -54,6 +54,21 @@ $(document).ready(function() {
 			   else $('#kok_notifications').append('<div class="kok_notification">Brak powiadomień.</div>');
 		   }
 		});
+
+		$('.structure_upgrade').on('click', function (){
+			var structure = $(this).attr('data-struct');
+			var postdata = {'action': 'upgrade-structure', 'structure': structure};
+			$.ajax({
+			   url: '/structures',
+			   type: 'POST',
+			   contentType: 'application/json',
+			   data: JSON.stringify(postdata),
+			   success: function (result) {
+			   	if(result == 'success') window.location.href = '/dashboard';
+				   else if(result == 'fail:resources') alert('Brak środków.');
+			   }
+			});
+		});
 	}
 	else if(site == '/structures') {
 		$('body').css('background-image', 'none');
