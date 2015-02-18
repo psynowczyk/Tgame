@@ -90,44 +90,46 @@ $(document).ready(function() {
 		});
 	}
 	else if(site == '/observatory') {
-		$('body').css('background-image', 'none');
-		$('#spacemapbox').css('background-image', 'url(images/ajaxloader.gif)');
-
-		var postdata = {'action': 'load-spacemap'};
-		$.ajax({
-		   url: '/observatory',
-		   type: 'POST',
-		   contentType: 'application/json',
-		   data: JSON.stringify(postdata),
-		   success: function (result) {
-		   	if(result != 'fail') {
-		   		$('#spacemapbox').css('background-image', 'none');
-		   		var details = result[result.length - 1].split(':');
-		   		var oblvl = parseInt(details[0]);
-		   		var owpx = parseInt(details[1]);
-		   		var owpy = parseInt(details[2]);
-		   		var rangecount = 9 + (oblvl*2);
-		   		var boxwidth = Math.floor($('#spacemapbox').width() / rangecount);
-		   		for (var x = 0; x < rangecount*rangecount; x++) {
-		   			var ox = owpx-((rangecount-1)/2)+(x%rangecount);
-		   			var oy = owpy+((rangecount-1)/2)-(Math.floor(x/rangecount));
-		   			$('#spacemapbox').append('<div class="spacemap_object" data-cx="'+ ox +'" data-cy="'+ oy +'" data-objtype="0" data-status="0" style="width:'+ (boxwidth-2) +'px; height:'+ (boxwidth-2) +'px;"></div>');
-		   		}
-		   		for (var x = 0; x < result.length - 1; x++) {
-		   			var ox = result[x].coordinates.x;
-		   			var oy = result[x].coordinates.y;
-		   			$('.spacemap_object[data-cx='+ ox +'][data-cy='+ oy +']').attr('data-objtype', '1').css('background-image', 'url(images/planets/'+ result[x].image +'.jpg)');
-		   		}
-		   	}
-			   else if(result == 'fail') $('#spacemapbox').html('Could not load the map.');
-		   }
-		});
+		$('body').css('background-image', 'url(images/observatory.jpg)');
+		function LoadMap() {
+			var postdata = {'action': 'load-spacemap'};
+			$.ajax({
+			   url: '/observatory',
+			   type: 'POST',
+			   contentType: 'application/json',
+			   data: JSON.stringify(postdata),
+			   success: function (result) {
+			   	if(result != 'fail') {
+			   		var details = result[result.length - 1].split(':');
+			   		var oblvl = parseInt(details[0]);
+			   		var owpx = parseInt(details[1]);
+			   		var owpy = parseInt(details[2]);
+			   		var rangecount = 9 + oblvl*2;
+			   		var boxwidth = Math.floor($('#spacemapbox').width() / rangecount);
+			   		for (var x = 0; x < rangecount*rangecount; x++) {
+			   			var sep = '';
+			   			if (x > 0 && x % rangecount == 0) sep = '<div class=spacemap_sep></div>';
+			   			var ox = owpx-((rangecount-1)/2)+(x%rangecount);
+			   			var oy = owpy+((rangecount-1)/2)-(Math.floor(x/rangecount));
+			   			$('#spacemapbox').append(sep +'<div class="spacemap_object" data-cx="'+ ox +'" data-cy="'+ oy +'" data-objtype="0" data-status="0" style="width:'+ (boxwidth-4) +'px; height:'+ (boxwidth-4) +'px;"></div>');
+			   		}
+			   		for (var x = 0; x < result.length - 1; x++) {
+			   			var ox = result[x].coordinates.x;
+			   			var oy = result[x].coordinates.y;
+			   			$('.spacemap_object[data-cx='+ ox +'][data-cy='+ oy +']').attr('data-objtype', '1').css('background-image', 'url(images/planets/'+ result[x].image +'.png)');
+			   		}
+			   	}
+				   else if(result == 'fail') $('#spacemapbox').html('Could not load the map.');
+			   }
+			});
+		}
+		LoadMap();
 
 		$(document).on('click', '.spacemap_object[data-objtype="1"]', function () {
 			var that = $(this);
 			var status = that.attr('data-status');
 			if (status == 0) {
-				var tempwidth = that.width();
+				var tempwidth = that.width() - 1;
 				var postdata = {'action': 'get-spaceobjdetails', 'coordinates': $(this).attr('data-cx') +':'+ $(this).attr('data-cy')};
 				$.ajax({
 				   url: '/observatory',
@@ -157,6 +159,65 @@ $(document).ready(function() {
 				that.html('');
 				that.attr('data-status', '0');
 			}
+		});
+
+		$(document).on('click', '.spacemap_engage', function () {
+			var that = $(this);
+			var enemy_ox = that.attr('data-cx');
+			var enemy_oy = that.attr('data-cy');
+			var postdata = {'action': 'get-engageoptions'};
+			$.ajax({
+			   url: '/observatory',
+			   type: 'POST',
+			   contentType: 'application/json',
+			   data: JSON.stringify(postdata),
+			   success: function (result) {
+			   	if(result != 'fail') {
+			   		$('#spacemapbox').fadeOut(400, function() {
+				   		var options = '';
+				   		var weapons = ['missile:Rakieta międzyplanetarna', 'heavy_missile:Ciężka rakieta międzyplanetarna', 'antimatter:Antymateria'];
+			   			for (var x = 0; x < weapons.length; x++) {
+			   				var weapons_split = weapons[x].split(':');
+			   				var weapon_code = weapons_split[0];
+			   				var weapon_name = weapons_split[1];
+			   				var weapon_lvl = result.weapons[weapon_code];
+			   				if (weapon_lvl > 0) options += '<option value="'+ weapon_code +':'+ weapon_lvl +':'+ weapon_name +'">'+ weapon_name +' Lv. '+ weapon_lvl +'</option>';
+			   			}
+							$('#spacemapbox').html(
+								'<select id="weapon_choose">'+ options +'</select>'+
+								'<div style="width: 100%;"></div>'+
+								'<div class="spacemap_engage_submit" data-cx="'+ enemy_ox +'" data-cy="'+ enemy_oy +'">potwierdź</div>'
+							);
+						}).fadeIn(400);
+			   	}
+			   }
+			});
+		});
+
+		$(document).on('click', '.spacemap_engage_submit', function() {
+			var that = $(this);
+			var enemy_ox = that.attr('data-cx');
+			var enemy_oy = that.attr('data-cy');
+			var weapon = $('select#weapon_choose').val();
+			var postdata = {'action': 'engage-enemy', 'enemy_ox': enemy_ox, 'enemy_oy': enemy_oy, 'weapon': weapon};
+			$.ajax({
+			   url: '/observatory',
+			   type: 'POST',
+			   contentType: 'application/json',
+			   data: JSON.stringify(postdata),
+			   success: function (result) {
+			   	if(result != 'fail') {
+			   		if(result == 'enemydestroyed') {
+			   			alert('Przeciwnik został unicestwiony.');
+			   			window.location.href = '/observatory';
+			   		}
+			   		else if(result == 'attackfailed') {
+			   			alert('Przeciwnik się obronił.');
+			   			window.location.href = '/observatory';
+			   		}
+			   	}
+			   }
+			});
 		});
 
 		$('.structure_upgrade').on('click', function (){
