@@ -10,18 +10,21 @@ module.exports = function (app, passport) {
 	app.get('*', function (req, res, next) {
 		res.locals.loggedIn = (req.user) ? true : false;
 		if (req.isAuthenticated()) {
-			res.locals.username = req.user.local.username || null;
-			res.locals.usertype = req.user.local.usertype || null;
-			Wallet.findOne({'owner': req.user._id}, function (err, result) {
-				if(!err && result) {
-					res.locals.cash = result.cash;
-					res.locals.oil = result.oil;
-					res.locals.gas = result.gas;
-					res.locals.metal = result.metal;
-					next();
-				}
-				else console.log(err);
-			});
+			if (req.url != '/defeated' && req.url != '/logout' && req.user.local.acstatus == 'defeated') res.redirect('/defeated');
+			else {
+				res.locals.username = req.user.local.username || null;
+				res.locals.usertype = req.user.local.usertype || null;
+				Wallet.findOne({'owner': req.user._id}, function (err, result) {
+					if(!err && result) {
+						res.locals.cash = result.cash;
+						res.locals.oil = result.oil;
+						res.locals.gas = result.gas;
+						res.locals.metal = result.metal;
+						next();
+					}
+					else console.log(err);
+				});
+			}
 		}
 		else next();
 	});
@@ -39,7 +42,7 @@ module.exports = function (app, passport) {
 		}
 		else if (action == 'get-notifications') {
 			Notification.find({'owner': req.user._id}, function (err, result) {
-				if(!err && !result) res.send(result);
+				if(!err && result) res.send(result);
 				else res.send('fail');
 			}).limit(10);
 		}
@@ -218,6 +221,101 @@ module.exports = function (app, passport) {
 				}
 			});
 		}
+		else if (action == 'get-engageoptions') {
+			Structure.findOne({'owner': req.user._id}, function (err, structures) {
+				if (!err && structures) res.send(structures);
+				else {console.log(err); res.send('fail');}
+			});
+		}
+		else if (action == 'engage-enemy') {
+			var enemy_ox = req.body.enemy_ox;
+			var enemy_oy = req.body.enemy_oy;
+			console.log('got ox oy');
+			Planet.findOne({'coordinates.x': enemy_ox, 'coordinates.y': enemy_oy}, function (err, enemyplanet) {
+				if (!err && enemyplanet) {
+					console.log('got enemyplanet');
+					var weapon_details = req.body.weapon.split(':');
+					var weapon_code = weapon_details[0];
+					var weapon_lvl = parseInt(weapon_details[1]);
+					var weapon_name = weapon_details[2];
+					Structure.findOne({'owner': enemyplanet.owner}, function (err, enemystructures) {
+						if (!err && enemystructures) {
+							console.log('got enemystructures');
+							Cost.findOne({'id': 1}, function (err, costs) {
+								if (!err && costs) {
+									User.findOne({'_id': enemyplanet.owner}, function (err, enemyuser) {
+										if (!err && enemyuser) {
+											console.log('got enemyuser');
+											var damage = costs[weapon_code].cash * weapon_lvl;
+											var defense = 100;
+											if (weapon_code == 'missile' || weapon_code == 'heavy_missile') {
+												defense += costs.missile_shield.cash * enemystructures.defense.missile_shield / 10;
+												defense += costs.force_shield.cash * enemystructures.defense.force_shield / 10;
+												defense += costs.weapon_laser.cash * enemystructures.defense.weapon_laser / 10;
+												defense += costs.rockets.cash * enemystructures.defense.rockets / 10;
+												defense += costs.plasma.cash * enemystructures.defense.plasma / 10;
+											}
+											else if (weapon_code == 'antimatter') {
+												defense += costs.plasma.cash * enemystructures.defense.plasma / 10;
+											}
+											console.log('damage: '+ damage +' / defense: '+ defense);
+											var date = new Date();
+											var newNotification = new Notification();
+											newNotification.owner = req.user._id;
+											if(defense < damage) {
+												User.update({'_id': enemyplanet.owner}, {$set: {'local.acstatus': 'defeated'}}, function (err) {
+													if (!err) {
+														console.log('enemy defeated');
+														Planet.remove({'owner': enemyplanet.owner}, function (err) {
+															if (!err) {
+																console.log('enemy planet destroyed');
+																newNotification.text = date.getDate() +'.'+ (date.getMonth()+1) +'.'+ date.getFullYear() +' - Pokonałeś gracza '+ enemyuser.local.username;
+																newNotification.save(function (err) {
+																	if (err) console.log(err);
+																	else {
+																		console.log('notification sent');
+																		res.send('enemydestroyed');
+																	}
+																});
+															}
+															else console.log(err);
+														});
+													}
+													else console.log(err);
+												});
+											}
+											else if(defense >= damage) {
+												console.log('enemy not defeated');
+												newNotification.text = date.getDate() +'.'+ (date.getMonth()+1) +'.'+ date.getFullYear() +' - Gracz '+ enemyuser.local.username +' obronił się przed twoim atakiem.';
+												newNotification.save(function (err) {
+													if (err) console.log(err);
+													else {
+														console.log('notification sent');
+														var enemyNotification = new Notification();
+														enemyNotification.owner = enemyuser._id;
+														enemyNotification.text = date.getDate() +'.'+ (date.getMonth()+1) +'.'+ date.getFullYear() +' - Gracz '+ req.user.local.username +' zaatakował Cię bronią: '+ weapon_name +' Lv.'+ weapon_lvl +'.';
+														enemyNotification.save(function (err) {
+															if (err) console.log(err);
+															else {
+																console.log('enemy notification sent');
+																res.send('attackfailed');
+															}
+														});
+													}
+												});
+											}
+										}
+										else console.log(err);
+									});
+								}
+							});
+						}
+						else {console.log(err); res.send('fail');}
+					});
+				}
+				else console.log(err);
+			});
+		}
 	});
 
 	//WEAPONS
@@ -295,6 +393,11 @@ module.exports = function (app, passport) {
 				else res.redirect('/dashboard');
 			}
 		);
+	});
+
+	// DEFEATED
+	app.get('/defeated', isLoggedIn, function (req, res, next) {
+		res.render('defeated');
 	});
 
 }

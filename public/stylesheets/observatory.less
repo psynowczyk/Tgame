@@ -1,10 +1,13 @@
 #structuresbox[data-type="observatory"]		{width: 760px; height: auto; overflow: auto;}
-#spacemapbox					{margin-top: 15px; width: 100%; height: 400px; background-repeat: no-repeat; background-position: center center;}
+#spacemapbox					{margin-top: 15px; width: 100%; height: auto;}
 	.spacemap_object			{margin: 1px; background-size: contain; background-repeat: no-repeat; background-position: center center;}
-	.spacemap_object[data-objtype="1"]:hover	{cursor: pointer;}
-	.spacemap_objdetails		{position: relative; background: #ffffff; border-radius: 2px;}
-		.spacemap_objdetail	{padding: 2px 5px; min-width: 100px; word-break: keep-all; white-space: nowrap;}
-		.spacemap_engage		{font: normal 13px opensans_semibold; margin: 2px; width: calc(~'100% - 4px'); height: 24px; line-height: 24px; text-align: center; border-radius: 2px; color: #ffffff; text-shadow: 0px -1px 0px #990000;
+	.spacemap_object[data-objtype="1"]	{box-shadow: inset 0px 0px 0px 1px #a000cc;}
+	.spacemap_object[data-objtype="1"]:hover	{cursor: pointer; box-shadow: inset 0px 0px 0px 1px #00a8ff;}
+	.spacemap_sep				{width: 100%;}
+	.spacemap_objdetails		{position: relative; color: #ffffff; background: #081c26; border: 1px solid #00a8ff; border-radius: 2px;}
+		.spacemap_objdetail	{padding: 0px 5px; min-width: 100px; word-break: keep-all; white-space: nowrap;}
+		.spacemap_engage,
+		.spacemap_engage_submit		{font: normal 13px opensans_semibold; margin: 2px; width: calc(~'100% - 4px'); height: 24px; line-height: 24px; text-align: center; border-radius: 2px; color: #ffffff; text-shadow: 0px -1px 0px #990000;
 			background: #cc0000; /* Old browsers */
 			background: -moz-linear-gradient(top, #cc0000 0%, #b30000 100%); /* FF3.6+ */
 			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cc0000), color-stop(100%,#b30000)); /* Chrome,Safari4+ */
@@ -14,4 +17,6 @@
 			background: linear-gradient(to bottom, #cc0000 0%,#b30000 100%); /* W3C */
 			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#cc0000', endColorstr='#b30000',GradientType=0); /* IE6-9 */
 		}
-		.spacemap_engage:hover	{cursor: pointer; background: #ff0000; text-shadow: none;}
+		.spacemap_engage_submit	{padding: 0 10px; width: auto;}
+		.spacemap_engage:hover,
+		.spacemap_engage_submit:hover	{cursor: pointer; background: #ff0000; text-shadow: none;}
