@@ -3,4 +3,28 @@ extends layout
 block content
 	div(id='kokpitbox')
 		div(id='kok_planet', style='background-image: url(../images/planets/'+ planet +'.jpg);')
-		div(id='kok_notifications')
+		div(id='kok_leftbox')
+			div(id='structuresbox')
+				div(class='structure')
+					div(class='structure_image', data-type='laboratory')
+					div(class='structure_details')
+						div(class='structure_title') Laboratorium
+						div(class='structure_lvlbox')
+							div(class='structure_lvl')= 'Lv. '+ structures.technology.laboratory
+						div(class='structure_costs')
+							div(class='structure_upgrade', data-struct='laboratory') Ulepsz
+							div(class='walletbox')
+								div(class='walleticon', data-type='cash') Gold
+								div(class='walletvalue')= costs.laboratory.cash * structures.technology.laboratory
+							div(class='walletbox')
+								div(class='walleticon', data-type='oil') Oil
+								div(class='walletvalue')= costs.laboratory.oil * structures.technology.laboratory
+							div(class='walletbox')
+								div(class='walleticon', data-type='gas') Gas
+								div(class='walletvalue')= costs.laboratory.gas * structures.technology.laboratory
+							div(class='walletbox')
+								div(class='walleticon', data-type='metal') Metal
+								div(class='walletvalue')= costs.laboratory.metal * structures.technology.laboratory
+			div(id='kok_notifications')
+
+	

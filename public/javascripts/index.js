@@ -54,6 +54,22 @@ $(document).ready(function() {
 			   else $('#kok_notifications').append('<div class="kok_notification">Brak powiadomień.</div>');
 		   }
 		});
+
+		$('.structure_upgrade').on('click', function (){
+			var structure = $(this).attr('data-struct');
+			var postdata = {'action': 'upgrade-structure', 'structure': structure};
+			$.ajax({
+			   url: '/structures',
+			   type: 'POST',
+			   contentType: 'application/json',
+			   data: JSON.stringify(postdata),
+			   success: function (result) {
+			   	if(result == 'success') window.location.href = '/dashboard';
+				   else if(result == 'fail:resources') alert('Brak środków.');
+				   else if(result == 'fail:lvl') alert('Zbyt niski poziom laboratorium.');
+			   }
+			});
+		});
 	}
 	else if(site == '/structures') {
 		$('body').css('background-image', 'url(../images/structures/mines.jpg');
@@ -68,6 +84,7 @@ $(document).ready(function() {
 			   success: function (result) {
 			   	if(result == 'success') window.location.href = '/structures';
 				   else if(result == 'fail:resources') alert('Brak środków.');
+				   else if(result == 'fail:lvl') alert('Zbyt niski poziom laboratorium.');
 			   }
 			});
 		});
@@ -85,6 +102,7 @@ $(document).ready(function() {
 			   success: function (result) {
 			   	if(result == 'success') window.location.href = '/weapons';
 				   else if(result == 'fail:resources') alert('Brak środków.');
+				   else if(result == 'fail:lvl') alert('Zbyt niski poziom laboratorium.');
 			   }
 			});
 		});
@@ -170,6 +188,7 @@ $(document).ready(function() {
 			   success: function (result) {
 			   	if(result == 'success') window.location.href = '/observatory';
 				   else if(result == 'fail:resources') alert('Brak środków.');
+				   else if(result == 'fail:lvl') alert('Zbyt niski poziom laboratorium.');
 			   }
 			});
 		});
@@ -281,5 +300,20 @@ $(document).ready(function() {
 	}
 	else if(site == '/defense') {
 		$('body').css('background-image', 'url(../images/defense.jpg)');
+		$('.structure_upgrade').on('click', function (){
+			var structure = $(this).attr('data-struct');
+			var postdata = {'action': 'upgrade-structure', 'structure': structure};
+			$.ajax({
+			   url: '/structures',
+			   type: 'POST',
+			   contentType: 'application/json',
+			   data: JSON.stringify(postdata),
+			   success: function (result) {
+			   	if(result == 'success') window.location.href = '/defense';
+				   else if(result == 'fail:resources') alert('Brak środków.');
+				   else if(result == 'fail:lvl') alert('Zbyt niski poziom laboratorium.');
+			   }
+			});
+		});
 	}
 });

@@ -78,8 +78,18 @@ module.exports = function (app, passport) {
 	// DASHBOARD
 	app.get('/dashboard', isLoggedIn, function (req, res, next) {
 		Planet.findOne({'owner': req.user._id}, function (err, planet) {
-			if(!err && planet) res.render('dashboard', {'planet': planet.image});
-			else console.log(err);
+			if(!err && planet) {
+				Structure.findOne({'owner': req.user._id}, function (err, structures) {
+					if (!err && structures) {
+						Cost.findOne({'id': 1}, function (err, costs) {
+							if (!err && costs) res.render('dashboard', {'planet': planet.image, 'structures': structures, 'costs': costs});
+							else console.log('costs not found');
+						});
+					}
+					else console.log('structures not found');
+				});
+			}
+			else console.log('planet not found');
 		});
 	});
 
@@ -104,53 +114,53 @@ module.exports = function (app, passport) {
 			if (structure == 'gold_mine' || structure == 'oil_rig' || structure == 'gas_rig' || structure == 'metal_mine') structure_type = 'income';
 			else if (structure == 'observatory' || structure == 'laboratory') structure_type = 'technology';
 			else if (structure == 'missile' || structure == 'heavy_missile' || structure == 'antimatter') structure_type = 'weapons';
-			console.log(structure_type); // COmMENT
+			else if (structure == 'missile_shield' || structure == 'force_shield' || structure == 'weapon_laser' || structure == 'rockets' || structure == 'plasma') structure_type = 'defense';
 			Structure.findOne({'owner': req.user._id}, function (err, structures) {
 				if(!err && structures) {
-					console.log('got structures'); // COmMENT
-					Cost.findOne({'id': 1}, function (err, costs) {
-						if(!err && costs) {
-							console.log('got costs'); // COmMENT
-							Wallet.findOne({'owner': req.user._id}, function (err, wallet) {
-								if(!err && wallet) {
-									console.log('got wallet'); // COmMENT
-									if (
-										wallet.cash >= costs[structure].cash * structures[structure_type][structure] &&
-										wallet.oil >= costs[structure].oil * structures[structure_type][structure] &&
-										wallet.gas >= costs[structure].gas * structures[structure_type][structure] &&
-										wallet.metal >= costs[structure].metal * structures[structure_type][structure]
-									) {
-										Wallet.update(
-											{'owner': req.user._id},
-											{
-												$set: {
-													'cash': wallet.cash - costs[structure].cash * structures[structure_type][structure],
-													'oil': wallet.oil - costs[structure].oil * structures[structure_type][structure],
-													'gas': wallet.gas - costs[structure].gas * structures[structure_type][structure],
-													'metal': wallet.metal - costs[structure].metal * structures[structure_type][structure]
+					if (structures.technology.laboratory>structures[structure_type][structure]) {
+						Cost.findOne({'id': 1}, function (err, costs) {
+							if(!err && costs) {
+								Wallet.findOne({'owner': req.user._id}, function (err, wallet) {
+									if(!err && wallet) {
+										if (
+											wallet.cash >= costs[structure].cash * structures[structure_type][structure] &&
+											wallet.oil >= costs[structure].oil * structures[structure_type][structure] &&
+											wallet.gas >= costs[structure].gas * structures[structure_type][structure] &&
+											wallet.metal >= costs[structure].metal * structures[structure_type][structure]
+										) {
+											Wallet.update(
+												{'owner': req.user._id},
+												{
+													$set: {
+														'cash': wallet.cash - costs[structure].cash * structures[structure_type][structure],
+														'oil': wallet.oil - costs[structure].oil * structures[structure_type][structure],
+														'gas': wallet.gas - costs[structure].gas * structures[structure_type][structure],
+														'metal': wallet.metal - costs[structure].metal * structures[structure_type][structure]
+													}
+												},
+												function (err) {
+													if(err) console.log(err);
+													else {
+														console.log('wallet updated'); // COmMENT
+														var query = {$set: {}};
+														query.$set[structure_type +'.'+ structure] = structures[structure_type][structure] + 1;
+														Structure.update({'owner': req.user._id}, query, function (err) {
+															if(err) {console.log(err); res.send('fail');}
+															else res.send('success');
+														});
+													}
 												}
-											},
-											function (err) {
-												if(err) console.log(err);
-												else {
-													console.log('wallet updated'); // COmMENT
-													var query = {$set: {}};
-													query.$set[structure_type +'.'+ structure] = structures[structure_type][structure] + 1;
-													Structure.update({'owner': req.user._id}, query, function (err) {
-														if(err) {console.log(err); res.send('fail');}
-														else res.send('success');
-													});
-												}
-											}
-										);
+											);
+										}
+										else res.send('fail:resources');
 									}
-									else res.send('fail:resources');
-								}
-								else console.log(err);
-							});
-						}
-						else console.log(err);
-					});
+									else console.log(err);
+								});
+							}
+							else console.log(err);
+						});
+					}
+					else res.send('fail:lvl');
 				}
 				else console.log(err);
 			});
